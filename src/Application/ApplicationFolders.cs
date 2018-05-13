@@ -1,7 +1,8 @@
 using System;
-using System.IO;
 using System.Linq;
-using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Aspenlaub.Net.CSharp.Foundry.Interfaces;
+using Aspenlaub.Net.GitHub.CSharp.Pegh;
+using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
+using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application {
     public class ApplicationFolders {
@@ -13,19 +14,18 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application {
             ApplicationDataFolder = applicationDataFolder;
         }
 
-        public string ApplicationFolder(string subFolder) {
-            var folder = ApplicationDataFolder + ApplicationName + '\\';
+        public IFolder ApplicationFolder(string subFolder) {
+            IFolder folder = new Folder(ApplicationDataFolder);
+            folder = folder.SubFolder(ApplicationName);
             foreach (var s in subFolder.Split('\\').Where(s => s.Length != 0)) {
-                folder = folder + s + '\\';
-                if (Directory.Exists(folder)) { continue; }
-
-                Directory.CreateDirectory(folder);
+                folder = folder.SubFolder(s);
+                folder.CreateIfNecessary();
             }
 
             return folder;
         }
 
-        public string ApplicationFolder(EnvironmentType environmentType, string subFolder) {
+        public IFolder ApplicationFolder(EnvironmentType environmentType, string subFolder) {
             return ApplicationFolder(Enum.GetName(typeof(EnvironmentType), environmentType) + '\\' + subFolder);
         }
     }

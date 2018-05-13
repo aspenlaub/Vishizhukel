@@ -52,7 +52,6 @@
     <Compile Include="Application\IApplicationCommandExecutionContext.cs" />
     <Compile Include="Application\IApplicationLog.cs" />
     <Compile Include="Application\IFeedbackToApplication.cs" />
-    <Compile Include="EnvironmentType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
