@@ -8,6 +8,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
         internal IApplicationCommandController Controller { get; }
         internal IApplicationCommandExecutionContext Context { get; private set; }
         internal List<IFeedbackToApplication> FeedbacksToApplication { get; set; }
+        internal object FeedbacksToApplicationLock;
         internal bool CommandsEnabledOrDisabledWasReported { get; set; }
 
         internal static readonly int MilliSecondsToWaitForFeedbackToReturn = 5;
@@ -17,13 +18,22 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
             Controller = controller;
             Context = controller;
             FeedbacksToApplication = new List<IFeedbackToApplication>();
+            FeedbacksToApplicationLock = new object();
         }
 
         internal void RecordApplicationFeedback(IFeedbackToApplication feedback) {
             if (feedback.Type == FeedbackType.CommandsEnabledOrDisabled) {
                 CommandsEnabledOrDisabledWasReported = true;
             }
-            FeedbacksToApplication.Add(feedback);
+            lock(FeedbacksToApplicationLock) {
+                FeedbacksToApplication.Add(feedback);
+            }
+        }
+
+        internal List<IFeedbackToApplication> GetFeedbacksToApplication() {
+            lock(FeedbacksToApplicationLock) {
+                return new List<IFeedbackToApplication>(FeedbacksToApplication);
+            }
         }
 
         public void Dispose() {
