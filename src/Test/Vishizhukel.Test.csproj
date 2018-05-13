@@ -21,21 +21,59 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\..\VishizhukelBin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <IntermediateOutputPath>..\..\temp\obj\Debug\</IntermediateOutputPath>
+    <GenerateBuildInfoConfigFile>false</GenerateBuildInfoConfigFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\..\VishizhukelBin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <IntermediateOutputPath>..\..\temp\obj\Release\</IntermediateOutputPath>
+    <UseVsHostingProcess>false</UseVsHostingProcess>
+    <GenerateBuildInfoConfigFile>false</GenerateBuildInfoConfigFile>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspenlaub.Net.GitHub.CSharp.Pegh, Version=1.0.6704.27289, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Aspenlaub.Net.GitHub.CSharp.Pegh.1.0.6704.27289\lib\net46\Aspenlaub.Net.GitHub.CSharp.Pegh.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Aspenlaub.Net.GitHub.CSharp.Pegh.Components, Version=1.0.6704.27289, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Aspenlaub.Net.GitHub.CSharp.Pegh.1.0.6704.27289\lib\net46\Aspenlaub.Net.GitHub.CSharp.Pegh.Components.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Aspenlaub.Net.GitHub.CSharp.Pegh.Entities, Version=1.0.6704.27289, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Aspenlaub.Net.GitHub.CSharp.Pegh.1.0.6704.27289\lib\net46\Aspenlaub.Net.GitHub.CSharp.Pegh.Entities.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Aspenlaub.Net.GitHub.CSharp.Pegh.GUI, Version=1.0.6704.27290, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Aspenlaub.Net.GitHub.CSharp.Pegh.1.0.6704.27289\lib\net46\Aspenlaub.Net.GitHub.CSharp.Pegh.GUI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces, Version=1.0.6704.27289, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Aspenlaub.Net.GitHub.CSharp.Pegh.1.0.6704.27289\lib\net46\Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Aspenlaub.Net.GitHub.CSharp.Pegh.SampleEntities, Version=1.0.6704.27289, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Aspenlaub.Net.GitHub.CSharp.Pegh.1.0.6704.27289\lib\net46\Aspenlaub.Net.GitHub.CSharp.Pegh.SampleEntities.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DotNetZip, Version=1.11.0.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetZip.1.11.0\lib\net20\DotNetZip.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Management.Automation_PowerShell_3.0.6.3.9600.17400\lib\net40\System.Management.Automation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -45,13 +83,54 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="ThisIsNotATest.cs" />
+    <Compile Include="Application\ApplicationCommandControllerTestExecutionContext.cs" />
+    <Compile Include="Application\ApplicationDataFolderTest.cs" />
+    <Compile Include="Application\FakeCommand.cs" />
+    <Compile Include="Application\FeedbackToApplicationTest.cs" />
+    <Compile Include="Application\PrimeNumbersCommand.cs" />
+    <Compile Include="Application\WhenGivingFeedbackToApplication.cs" />
+    <Compile Include="Application\WhenWorkingWithAddedDefaultDisabledCommand.cs" />
+    <Compile Include="Application\WhenWorkingWithAddedDefaultEnabledCommand.cs" />
+    <Compile Include="Application\WhenWorkingWithCommandThatCanBeEnabledOrDisabled.cs" />
+    <Compile Include="Application\WhenWorkingWithCommandThatCanBeExecuted.cs" />
+    <Compile Include="Application\WhenWorkingWithFakeCommand.cs" />
+    <Compile Include="Application\WhenWorkingWithThreads.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Entities\Vishizhukel.Entities.csproj">
+      <Project>{54FDF213-676D-4035-8E27-4C31D1679997}</Project>
+      <Name>Vishizhukel.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Interfaces\Vishizhukel.Interfaces.csproj">
+      <Project>{A91475FB-BB01-4CA5-879E-28CAF5E2358C}</Project>
+      <Name>Vishizhukel.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vishizhukel.csproj">
+      <Project>{F8390D61-7E8B-4174-AFB1-8511D9919308}</Project>
+      <Name>Vishizhukel</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

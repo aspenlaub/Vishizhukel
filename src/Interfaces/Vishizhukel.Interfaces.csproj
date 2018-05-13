@@ -16,18 +16,24 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\..\VishizhukelBin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <IntermediateOutputPath>..\..\temp\obj\Debug\</IntermediateOutputPath>
+    <GenerateBuildInfoConfigFile>false</GenerateBuildInfoConfigFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\..\VishizhukelBin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <IntermediateOutputPath>..\..\temp\obj\Release\</IntermediateOutputPath>
+    <UseVsHostingProcess>false</UseVsHostingProcess>
+    <GenerateBuildInfoConfigFile>false</GenerateBuildInfoConfigFile>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -40,7 +46,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Application\FeedbackTypes.cs" />
+    <Compile Include="Application\IApplicationCommand.cs" />
+    <Compile Include="Application\IApplicationCommandController.cs" />
+    <Compile Include="Application\IApplicationCommandExecutionContext.cs" />
+    <Compile Include="Application\IApplicationLog.cs" />
+    <Compile Include="Application\IFeedbackToApplication.cs" />
+    <Compile Include="EnvironmentType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="Basic\Vishizhukel.Interfaces.Basic.csproj">
+      <Project>{F7DC592F-F584-4A7D-9D6B-948B36E90A5B}</Project>
+      <Name>Vishizhukel.Interfaces.Basic</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
