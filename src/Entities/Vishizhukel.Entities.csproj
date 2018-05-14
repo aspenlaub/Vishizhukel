@@ -79,10 +79,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationDataFolder.cs" />
     <Compile Include="Application\LogEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SecretApplicationDataFolder.cs" />
-    <Compile Include="ApplicationDataFolder.cs" />
+    <Compile Include="SecretApplicationDataFolders.cs" />
+    <Compile Include="ApplicationDataFolders.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

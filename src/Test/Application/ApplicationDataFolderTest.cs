@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Aspenlaub.Net.GitHub.CSharp.Pegh;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
@@ -69,10 +70,12 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
         [TestMethod]
         public void ApplicationDataFolderIsSet() {
             var repository = new SecretRepository(new ComponentProvider());
-            var applicationDataFolderSecret = new SecretApplicationDataFolder();
+            var applicationDataFolderSecret = new SecretApplicationDataFolders();
             var errorsAndInfos = new ErrorsAndInfos();
-            repository.Get(applicationDataFolderSecret, errorsAndInfos);
+            var applicationDataFolders = repository.Get(applicationDataFolderSecret, errorsAndInfos);
             Assert.IsFalse(errorsAndInfos.AnyErrors(), string.Join("\r\n", errorsAndInfos.Errors));
+            var folderOnThisMachine = applicationDataFolders.FolderOnThisMachine();
+            Assert.AreEqual(Environment.MachineName.ToLower(), folderOnThisMachine.Machine.ToLower());
         }
     }
 }
