@@ -1,7 +1,7 @@
 ﻿using System;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
 
-namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities {
+namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities.Data {
     public class SecretApplicationDataFolders : ISecret<ApplicationDataFolders> {
         public static readonly string DefaultFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 

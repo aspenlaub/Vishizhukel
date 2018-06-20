@@ -3,7 +3,7 @@ using System.Linq;
 using System.Xml.Serialization;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
 
-namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities {
+namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities.Data {
     [XmlRoot("ApplicationDataFolders")]
     public class ApplicationDataFolders : List<ApplicationDataFolder>, ISecretResult<ApplicationDataFolders>  {
         public ApplicationDataFolders Clone() {

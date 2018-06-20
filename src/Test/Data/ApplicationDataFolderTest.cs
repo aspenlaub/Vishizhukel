@@ -5,10 +5,10 @@ using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application;
-using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities;
+using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
+namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Data {
     [TestClass]
     public class ApplicationDataFolderTest {
         protected string AppName, SubFolderShortName;
