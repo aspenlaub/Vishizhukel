@@ -4,8 +4,6 @@ using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Threading;
-using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
-using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities.Data;
 
@@ -16,7 +14,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Core.Data {
         protected static List<Type> DbSetTypes;
 
         // ReSharper disable once PublicConstructorInAbstractClass
-        public ContextBase(EnvironmentType environmentType, SynchronizationContext uiSynchronizationContext, string connectionStringPrefix, ConnectionStringInfos connectionStringInfos) : base(ConnectionString(environmentType, connectionStringPrefix)) {
+        public ContextBase(EnvironmentType environmentType, SynchronizationContext uiSynchronizationContext, string connectionStringPrefix, ConnectionStringInfos connectionStringInfos) : base(ConnectionString(environmentType, connectionStringPrefix, connectionStringInfos)) {
             EnvironmentType = environmentType;
             UiSynchronizationContext = uiSynchronizationContext;
             SetDbSetProperties();
@@ -30,15 +28,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Core.Data {
             Database.Initialize(force);
         }
 
-        public static string ConnectionString(EnvironmentType environmentType, string prefix) {
-            var componentProvider = new ComponentProvider();
-            var connectionStringInfosSecret = new SecretConnectionStringInfos();
-            var errorsAndInfos = new ErrorsAndInfos();
-            var connectionStringInfos = componentProvider.SecretRepository.Get(connectionStringInfosSecret, errorsAndInfos);
-            if (errorsAndInfos.AnyErrors()) {
-                throw new Exception(string.Join("\r\n", errorsAndInfos.Errors));
-            }
-
+        public static string ConnectionString(EnvironmentType environmentType, string prefix, ConnectionStringInfos connectionStringInfos) {
             var connectionStringInfo = connectionStringInfos.FirstOrDefault(c => prefix.Contains(c.Namespace) && c.EnvironmentType == environmentType);
             if (connectionStringInfo != null) {
                 return connectionStringInfo.ConnectionString;

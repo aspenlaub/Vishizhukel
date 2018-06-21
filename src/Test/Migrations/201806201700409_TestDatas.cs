@@ -7,7 +7,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Migrations {
             CreateTable(
                 "dbo.TestDatas",
                 c => new {
-                    Guid = c.String(nullable: false, maxLength: 128),
+                    Guid = c.String(false, 128),
                     Name = c.String(),
                 })
                 .PrimaryKey(t => t.Guid);
