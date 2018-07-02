@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Core {
     public class IocContainer {
@@ -23,6 +24,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Core {
         public void SetFlag(string key, bool value) {
             if (Flags.ContainsKey(key)) { return; }
 
+            VerifyCallStack(new StackTrace(true));
             Flags[key] = value;
         }
 
@@ -37,6 +39,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Core {
         public void SetObject<T>(T obj) where T : class {
             if (Objects.ContainsKey(typeof(T))) { return; }
 
+            VerifyCallStack(new StackTrace(true));
             Objects[typeof(T)] = obj;
         }
 
@@ -53,6 +56,18 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Core {
         public static void ResetGlobalInstance() {
             lock (LockObject) {
                 vGlobalInstance = new IocContainer();
+            }
+        }
+
+        protected void VerifyCallStack(StackTrace stackTrace) {
+            string fullyQualifiedMethodName;
+            bool isStatic, constructor;
+            CallStackAnalyzer.CalledBy(stackTrace, out fullyQualifiedMethodName, out isStatic, out constructor);
+            if (!fullyQualifiedMethodName.EndsWith(@".RegisterTypes") || !isStatic) {
+                throw new Exception($"Ioc container must be configured in a non-static method called RegisterTypes, not in {fullyQualifiedMethodName}");
+            }
+            if (constructor) {
+                throw new Exception($"Ioc container configuration method {fullyQualifiedMethodName} cannot be called in a constructor");
             }
         }
     }
