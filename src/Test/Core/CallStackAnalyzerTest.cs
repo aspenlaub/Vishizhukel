@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Core;
+﻿using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Core {
@@ -10,7 +8,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Core {
         public void CanDetermineCallContext() {
             string fullyQualifiedClassName;
             bool isStatic, constructor;
-            CallStackAnalyzer.CalledBy(new StackTrace(true), out fullyQualifiedClassName, out isStatic, out constructor);
+            CallStackAnalyzer.CalledBy(0, out fullyQualifiedClassName, out isStatic, out constructor);
             Assert.IsFalse(isStatic);
             Assert.IsFalse(constructor);
             Assert.AreEqual(typeof(CallStackAnalyzerTest).Namespace + '.' + nameof(CanDetermineCallContext), fullyQualifiedClassName);
@@ -33,11 +31,11 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Core {
         internal static bool IsStatic, Constructor;
 
         internal CallStackAnalyzerTestObject() {
-            CallStackAnalyzer.CalledBy(new StackTrace(true), out FullyQualifiedMethodName, out IsStatic, out Constructor);
+            CallStackAnalyzer.CalledBy(0, out FullyQualifiedMethodName, out IsStatic, out Constructor);
         }
 
         internal static void RegisterTypes() {
-            CallStackAnalyzer.CalledBy(new StackTrace(true), out FullyQualifiedMethodName, out IsStatic, out Constructor);
+            CallStackAnalyzer.CalledBy(0, out FullyQualifiedMethodName, out IsStatic, out Constructor);
         }
     }
 }
