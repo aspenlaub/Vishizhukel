@@ -62,7 +62,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Core {
             string fullyQualifiedMethodName;
             bool isStatic, constructor;
             CallStackAnalyzer.CalledBy(2, out fullyQualifiedMethodName, out isStatic, out constructor);
-            if (!fullyQualifiedMethodName.EndsWith(@".RegisterTypes") || !isStatic) {
+            if (!fullyQualifiedMethodName.EndsWith(@".RegisterTypes") || isStatic) {
                 throw new Exception($"Ioc container must be configured in a non-static method called RegisterTypes, not in {fullyQualifiedMethodName}");
             }
             if (constructor) {

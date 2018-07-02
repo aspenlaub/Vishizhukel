@@ -101,6 +101,7 @@
   <ItemGroup>
     <Compile Include="Application\ApplicationCommandControllerTestExecutionContext.cs" />
     <Compile Include="Core\CallStackAnalyzerTest.cs" />
+    <Compile Include="Core\IocContainerTest.cs" />
     <Compile Include="Data\ApplicationDataFolderTest.cs" />
     <Compile Include="Application\FakeCommand.cs" />
     <Compile Include="Application\FeedbackToApplicationTest.cs" />
