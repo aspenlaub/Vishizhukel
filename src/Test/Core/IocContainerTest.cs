@@ -1,4 +1,5 @@
-﻿using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Core;
+﻿using System.Runtime.CompilerServices;
+using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Core;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities.Data;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -8,9 +9,10 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Core {
     public class IocContainerTest {
         protected IocContainer IocContainer;
 
-        [TestMethod]
+        [TestMethod, MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
         public void CanRegisterTypes() {
             IocContainer = new IocContainer();
+            RegisterTypes();
         }
 
         protected void RegisterTypes() {
