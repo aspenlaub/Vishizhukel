@@ -3,10 +3,12 @@ using System.IO;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using Aspenlaub.Net.GitHub.CSharp.Pegh;
+using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Core {
     public class ExceptionSaver {
-        public static void SaveUnhandledException(Exception exception, string source, Action<SavedException> onExceptionSaved) {
+        public static void SaveUnhandledException(IFolder exceptionLogFolder, Exception exception, string source, Action<SavedException> onExceptionSaved) {
             var assemblyName = Assembly.GetExecutingAssembly().GetName();
             var title = $"Unhandled exception in {assemblyName.Name} v{assemblyName.Version}";
             var message = exception.Message;
@@ -16,14 +18,11 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Core {
                 innerMessage = exception.InnerException.Message;
                 innerStackTrace = exception.InnerException.StackTrace;
             }
-            SaveException(title, message, stackTrace, innerMessage, innerStackTrace, onExceptionSaved);
+            SaveException(exceptionLogFolder, title, message, stackTrace, innerMessage, innerStackTrace, onExceptionSaved);
         }
 
-        private static void SaveException(string title, string message, string stackTrace, string innerMessage, string innerStackTrace, Action<SavedException> onExceptionSaved) {
-            const string folder = @"c:\temp\Exceptions\";
-            if (!Directory.Exists(folder)) {
-                Directory.CreateDirectory(folder);
-            }
+        private static void SaveException(IFolder exceptionLogFolder, string title, string message, string stackTrace, string innerMessage, string innerStackTrace, Action<SavedException> onExceptionSaved) {
+            exceptionLogFolder.CreateIfNecessary();
 
             var fileContents = "Title:\r\n" + title + "\r\nMessage:\r\n" + message + "\r\nStack trace:\r\n" + stackTrace + "\r\nInner message:\r\n" + innerMessage + "\r\nInner stack trace:\r\n" + innerStackTrace;
             var md5 = MD5.Create();
@@ -33,7 +32,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Core {
             foreach (var t in hash) { sb.Append(t.ToString("X2")); }
 
             var exceptionName = "Exception-" + sb;
-            var fileName = folder + exceptionName + ".txt";
+            var fileName = exceptionLogFolder.FullName + '\\' + exceptionName + ".txt";
             File.WriteAllText(fileName, fileContents);
 
             var savedException = new SavedException {
