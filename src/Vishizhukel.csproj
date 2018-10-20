@@ -87,6 +87,18 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Core\Vishizhukel.Core.csproj">
+      <Project>{76554b5a-36b3-4275-b05f-76ae8bf03cd8}</Project>
+      <Name>Vishizhukel.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="Entities\Vishizhukel.Entities.csproj">
+      <Project>{54fdf213-676d-4035-8e27-4c31d1679997}</Project>
+      <Name>Vishizhukel.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="GUI\Vishizhukel.GUI.csproj">
+      <Project>{a6d9ba99-065a-4306-92c5-fd15e473bdb2}</Project>
+      <Name>Vishizhukel.GUI</Name>
+    </ProjectReference>
     <ProjectReference Include="Interfaces\Basic\Vishizhukel.Interfaces.Basic.csproj">
       <Project>{F7DC592F-F584-4A7D-9D6B-948B36E90A5B}</Project>
       <Name>Vishizhukel.Interfaces.Basic</Name>
@@ -94,6 +106,10 @@
     <ProjectReference Include="Interfaces\Vishizhukel.Interfaces.csproj">
       <Project>{A91475FB-BB01-4CA5-879E-28CAF5E2358C}</Project>
       <Name>Vishizhukel.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="IO\Vishizhukel.IO.csproj">
+      <Project>{0efe8e0c-5913-449b-932a-c5a320222a52}</Project>
+      <Name>Vishizhukel.IO</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
