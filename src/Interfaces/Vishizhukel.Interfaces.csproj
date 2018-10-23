@@ -55,7 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Aspenlaub.Net.GitHub.CSharp.Pegh">
-      <Version>1.0.6868.21389</Version>
+      <Version>1.0.6870.39438</Version>
     </PackageReference>
     <PackageReference Include="DotNetZip">
       <Version>1.11.0</Version>
