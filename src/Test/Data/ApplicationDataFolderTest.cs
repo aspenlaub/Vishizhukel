@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
-using Aspenlaub.Net.GitHub.CSharp.Pegh;
+using System.Threading.Tasks;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
+using Aspenlaub.Net.GitHub.CSharp.Pegh.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities.Data;
@@ -68,11 +69,11 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Data {
         }
 
         [TestMethod]
-        public void ApplicationDataFolderIsSet() {
+        public async Task ApplicationDataFolderIsSet() {
             var repository = new SecretRepository(new ComponentProvider());
             var applicationDataFolderSecret = new SecretApplicationDataFolders();
             var errorsAndInfos = new ErrorsAndInfos();
-            var applicationDataFolders = repository.Get(applicationDataFolderSecret, errorsAndInfos);
+            var applicationDataFolders = await repository.GetAsync(applicationDataFolderSecret, errorsAndInfos);
             Assert.IsFalse(errorsAndInfos.AnyErrors(), string.Join("\r\n", errorsAndInfos.Errors));
             var folderOnThisMachine = applicationDataFolders.FolderOnThisMachine();
             Assert.AreEqual(Environment.MachineName.ToLower(), folderOnThisMachine.Machine.ToLower());
