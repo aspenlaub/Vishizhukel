@@ -6,17 +6,19 @@ using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Basic;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Basic.Application;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities.Application {
+    // ReSharper disable once UnusedMember.Global
     public class LogEntry : IGuid, INotifyPropertyChanged, ILogEntry {
         [Key]
         public string Guid { get; set; }
         private DateTime vCreatedAt;
-        public DateTime CreatedAt { get { return vCreatedAt; } set { vCreatedAt = value; OnPropertyChanged(nameof(CreatedAt)); } }
+        public DateTime CreatedAt { get => vCreatedAt; set { vCreatedAt = value; OnPropertyChanged(nameof(CreatedAt)); } }
         private LogEntryClass vClass;
-        public LogEntryClass Class { get { return vClass; } set { vClass = value; OnPropertyChanged(nameof(Class)); } }
+        public LogEntryClass Class { get => vClass; set { vClass = value; OnPropertyChanged(nameof(Class)); } }
         private string vMessage;
-        public string Message { get { return vMessage; } set { vMessage = value; OnPropertyChanged(nameof(Message)); } }
+        public string Message { get => vMessage; set { vMessage = value; OnPropertyChanged(nameof(Message)); } }
         private long vSequenceNumber;
-        public long SequenceNumber { get { return vSequenceNumber; } set { vSequenceNumber = value; OnPropertyChanged(nameof(SequenceNumber)); } }
+        public long SequenceNumber { get => vSequenceNumber;
+            set { vSequenceNumber = value; OnPropertyChanged(nameof(SequenceNumber)); } }
 
         public LogEntry() {
             Guid = System.Guid.NewGuid().ToString();

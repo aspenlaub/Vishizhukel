@@ -2,6 +2,6 @@
     public abstract class GlobalSequenceNumberGenerator {
         protected static long LastSequenceNumber;
 
-        public static long NextValue { get { return ++LastSequenceNumber; } }
+        public static long NextValue => ++ LastSequenceNumber;
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+// ReSharper disable UnusedMember.Global
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Core {
     public class IocContainer {
@@ -59,9 +60,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Core {
         }
 
         protected void VerifyCallFromNonStaticRegisterTypesMethodAndNotFromConstructor() {
-            string fullyQualifiedMethodName;
-            bool isStatic, constructor;
-            CallStackAnalyzer.CalledBy(2, out fullyQualifiedMethodName, out isStatic, out constructor);
+            CallStackAnalyzer.CalledBy(2, out var fullyQualifiedMethodName, out var isStatic, out var constructor);
             if (!fullyQualifiedMethodName.EndsWith(@".RegisterTypes")) {
                 throw new Exception($"Ioc container must be configured in a non-static method called RegisterTypes, not in {fullyQualifiedMethodName}. Make sure the method or the calling method is decorated with MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)");
             }

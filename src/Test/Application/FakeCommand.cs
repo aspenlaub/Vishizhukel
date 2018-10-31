@@ -4,7 +4,7 @@ using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Application;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
     public class FakeCommand : IApplicationCommand {
-        public bool MakeLogEntries { get { return true; } }
+        public bool MakeLogEntries => true;
         private readonly bool vCanExecute;
         protected IApplicationCommandController Controller;
         public bool WasExecuted { get; private set; }
@@ -15,7 +15,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
             WasExecuted = false;
         }
 
-        public string Name { get { return Properties.Resources.FakeCommandName; } }
+        public string Name => Properties.Resources.FakeCommandName;
 
         public bool CanExecute() {
             return vCanExecute;

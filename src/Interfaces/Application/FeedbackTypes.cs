@@ -1,3 +1,4 @@
+// ReSharper disable UnusedMember.Global
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Application {
     public enum FeedbackType {
         ImportantMessage, MessageOfNoImportance, MessagesOfNoImportanceWereIgnored,

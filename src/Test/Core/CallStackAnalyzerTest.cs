@@ -6,9 +6,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Core {
     public class CallStackAnalyzerTest {
         [TestMethod]
         public void CanDetermineCallContext() {
-            string fullyQualifiedClassName;
-            bool isStatic, constructor;
-            CallStackAnalyzer.CalledBy(0, out fullyQualifiedClassName, out isStatic, out constructor);
+            CallStackAnalyzer.CalledBy(0, out var fullyQualifiedClassName, out var isStatic, out var constructor);
             Assert.IsFalse(isStatic);
             Assert.IsFalse(constructor);
             Assert.AreEqual(typeof(CallStackAnalyzerTest).Namespace + '.' + nameof(CanDetermineCallContext), fullyQualifiedClassName);

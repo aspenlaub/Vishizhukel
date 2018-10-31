@@ -3,6 +3,7 @@ using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Application;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Basic.Application;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application {
+    // ReSharper disable once UnusedMember.Global
     public class ApplicationLog : IApplicationLog {
         public ObservableCollection<ILogEntry> LogEntries { get; }
 

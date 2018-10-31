@@ -7,7 +7,9 @@ using Aspenlaub.Net.GitHub.CSharp.Pegh.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Core {
+    // ReSharper disable once UnusedMember.Global
     public class ExceptionSaver {
+        // ReSharper disable once UnusedMember.Global
         public static void SaveUnhandledException(IFolder exceptionLogFolder, Exception exception, string source, Action<SavedException> onExceptionSaved) {
             var assemblyName = Assembly.GetExecutingAssembly().GetName();
             var title = $"Unhandled exception in {assemblyName.Name} v{assemblyName.Version}";

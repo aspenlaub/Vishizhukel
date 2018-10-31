@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Basic.Application;
+// ReSharper disable UnusedMember.Global
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Application {
     public interface IApplicationLog {

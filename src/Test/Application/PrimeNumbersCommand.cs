@@ -4,8 +4,8 @@ using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Application;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
     public class PrimeNumbersCommand : IApplicationCommand {
-        public bool MakeLogEntries { get { return true; } }
-        public string Name { get { return Properties.Resources.PrimeNumbersCommandName; } }
+        public bool MakeLogEntries => true;
+        public string Name => Properties.Resources.PrimeNumbersCommandName;
 
         public bool CanExecute() {
             return true;

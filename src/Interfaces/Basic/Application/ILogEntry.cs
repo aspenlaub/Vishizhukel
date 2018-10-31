@@ -1,4 +1,5 @@
 using System;
+// ReSharper disable UnusedMember.Global
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Basic.Application {
     public interface ILogEntry {

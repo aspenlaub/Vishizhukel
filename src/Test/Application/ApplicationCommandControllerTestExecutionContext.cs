@@ -6,7 +6,7 @@ using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Application;
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
     internal class ApplicationCommandControllerTestExecutionContext : IDisposable {
         internal IApplicationCommandController Controller { get; }
-        internal IApplicationCommandExecutionContext Context { get; private set; }
+        internal IApplicationCommandExecutionContext Context { get; }
         internal List<IFeedbackToApplication> FeedbacksToApplication { get; set; }
         internal object FeedbacksToApplicationLock;
         internal bool CommandsEnabledOrDisabledWasReported { get; set; }
