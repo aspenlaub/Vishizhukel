@@ -15,6 +15,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Core {
             RegisterTypes();
         }
 
+        [MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
         protected void RegisterTypes() {
             IocContainer.SetObject<IConnectionStringInfo>(new ConnectionStringInfo());
         }

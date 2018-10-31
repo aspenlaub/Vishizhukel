@@ -1,4 +1,5 @@
-﻿using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Core;
+﻿using System.Runtime.CompilerServices;
+using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Core {
@@ -28,10 +29,12 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Core {
         internal static string FullyQualifiedMethodName;
         internal static bool IsStatic, Constructor;
 
+        [MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
         internal CallStackAnalyzerTestObject() {
             CallStackAnalyzer.CalledBy(0, out FullyQualifiedMethodName, out IsStatic, out Constructor);
         }
 
+        [MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
         internal static void RegisterTypes() {
             CallStackAnalyzer.CalledBy(0, out FullyQualifiedMethodName, out IsStatic, out Constructor);
         }
