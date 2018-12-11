@@ -124,14 +124,20 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Data {
             if (DbSets != null && DbSets.Count != 0) { return; }
 
             DbSets = new Dictionary<Type, PropertyInfo>();
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery
-            foreach (var property in GetType().GetProperties()) {
-                var setType = property.PropertyType;
-                var isDbSet = setType.IsGenericType && typeof(DbSet<>).IsAssignableFrom(setType.GetGenericTypeDefinition());
-                if (!isDbSet) { continue; }
+            try {
+                // ReSharper disable once LoopCanBePartlyConvertedToQuery
+                foreach (var property in GetType().GetProperties()) {
+                    var setType = property.PropertyType;
+                    var isDbSet = setType.IsGenericType && typeof(DbSet<>).IsAssignableFrom(setType.GetGenericTypeDefinition());
+                    if (!isDbSet) {
+                        continue;
+                    }
 
-                var type = setType.GenericTypeArguments[0];
-                DbSets[type] = property;
+                    var type = setType.GenericTypeArguments[0];
+                    DbSets[type] = property;
+                }
+            // ReSharper disable once EmptyGeneralCatchClause
+            } catch {
             }
         }
     }
