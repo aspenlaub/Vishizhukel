@@ -56,6 +56,10 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Data {
             Database.Migrate();
         }
 
+        public void AddRange<T>(IEnumerable<T> entities) where T : class, IGuid {
+            entities.ToList().ForEach(e => Add(e));
+        }
+
         public new bool Add<T>(T entity) where T : class, IGuid {
             if (DbSets?.ContainsKey(typeof(T)) != true) { return false; }
 
@@ -72,6 +76,10 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Data {
                 UiSynchronizationContext.Send(x => entitySet.Add((T)entity), null);
             }
             return true;
+        }
+
+        public void RemoveRange<T>(IEnumerable<T> entities) where T : class, IGuid {
+            entities.ToList().ForEach(e => Remove(e));
         }
 
         public new bool Remove<T>(T entity) where T : class, IGuid {
