@@ -15,7 +15,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Data {
                 }
 
                 var testData = new TestData();
-                context.TestDatas.Add(testData);
+                context.Add(testData);
                 context.SaveChanges();
             }
         }

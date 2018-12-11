@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities.Data;
 using Microsoft.EntityFrameworkCore;
+
 // ReSharper disable UnusedMember.Global
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Data {
     public abstract class ContextBase : DbContext {
         protected EnvironmentType EnvironmentType;
         protected SynchronizationContext UiSynchronizationContext;
-        protected static List<Type> DbSetTypes;
+        protected static Dictionary<Type, PropertyInfo> DbSets;
         protected ConnectionStringInfos ConnectionStringInfos;
         protected string ConnectionStringPrefix;
 
@@ -54,6 +56,13 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Data {
             Database.Migrate();
         }
 
+        public new bool Add<T>(T entity) where T : class, IGuid {
+            if (DbSets?.ContainsKey(typeof(T)) != true) { return false; }
+
+            var entitySet = DbSets[typeof(T)].GetValue(this) as DbSet<T>;
+            return Add(entity, entitySet);
+        }
+
         protected bool Add<T>(object entity, DbSet<T> entitySet) where T : class, IGuid {
             if (!(entity is T)) { return false; }
 
@@ -63,6 +72,13 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Data {
                 UiSynchronizationContext.Send(x => entitySet.Add((T)entity), null);
             }
             return true;
+        }
+
+        public new bool Remove<T>(T entity) where T : class, IGuid {
+            if (DbSets?.ContainsKey(typeof(T)) != true) { return false; }
+
+            var entitySet = DbSets[typeof(T)].GetValue(this) as DbSet<T>;
+            return Remove(entity, entitySet);
         }
 
         protected bool Remove<T>(IGuid entity, DbSet<T> entitySet) where T : class, IGuid {
@@ -81,9 +97,9 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Data {
         }
 
         public void SetDbSetProperties() {
-            if (DbSetTypes != null && DbSetTypes.Count != 0) { return; }
+            if (DbSets != null && DbSets.Count != 0) { return; }
 
-            DbSetTypes = new List<Type>();
+            DbSets = new Dictionary<Type, PropertyInfo>();
             // ReSharper disable once LoopCanBePartlyConvertedToQuery
             foreach (var property in GetType().GetProperties()) {
                 var setType = property.PropertyType;
@@ -91,7 +107,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Data {
                 if (!isDbSet) { continue; }
 
                 var type = setType.GenericTypeArguments[0];
-                DbSetTypes.Add(type);
+                DbSets[type] = property;
             }
         }
     }
