@@ -56,6 +56,22 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Data {
             Database.Migrate();
         }
 
+        public override int SaveChanges() {
+            return SaveChanges(true);
+        }
+
+        public override int SaveChanges(bool acceptAllChangesOnSuccess) {
+            if (UiSynchronizationContext == null) {
+                return base.SaveChanges(acceptAllChangesOnSuccess);
+            }
+
+            var result = -1;
+            UiSynchronizationContext.Send(x => {
+                result = base.SaveChanges(acceptAllChangesOnSuccess);
+            }, null);
+            return result;
+        }
+
         public void AddRange<T>(IEnumerable<T> entities) where T : class, IGuid {
             entities.ToList().ForEach(e => Add(e));
         }
