@@ -11,7 +11,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
         internal object FeedbacksToApplicationLock;
         internal bool CommandsEnabledOrDisabledWasReported { get; set; }
 
-        internal static readonly int MilliSecondsToWaitForFeedbackToReturn = 5;
+        internal static readonly int MillisecondsToWaitForFeedbackToReturn = 5;
 
         internal ApplicationCommandControllerTestExecutionContext() {
             var controller = new ApplicationCommandController(RecordApplicationFeedback);

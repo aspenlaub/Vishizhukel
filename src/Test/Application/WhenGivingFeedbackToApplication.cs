@@ -15,7 +15,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
         public void CanReportMessageOfNoImportance() {
             using (var context = new ApplicationCommandControllerTestExecutionContext()) {
                 var feedback = CreateFeedbackAndReport(context, FeedbackType.MessageOfNoImportance, TestMessageOfNoImportance);
-                Thread.Sleep(ApplicationCommandControllerTestExecutionContext.MilliSecondsToWaitForFeedbackToReturn);
+                Thread.Sleep(ApplicationCommandControllerTestExecutionContext.MillisecondsToWaitForFeedbackToReturn);
                 Assert.AreEqual(1, context.FeedbacksToApplication.Count);
                 Assert.IsTrue(IsFeedbackEqualToRecordedFeedback(context, feedback, 0));
             }
@@ -37,7 +37,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
         public void CanReportImportantMessage() {
             using (var context = new ApplicationCommandControllerTestExecutionContext()) {
                 var feedback = CreateFeedbackAndReport(context, FeedbackType.ImportantMessage, ImportantTestMessage);
-                Thread.Sleep(ApplicationCommandControllerTestExecutionContext.MilliSecondsToWaitForFeedbackToReturn);
+                Thread.Sleep(ApplicationCommandControllerTestExecutionContext.MillisecondsToWaitForFeedbackToReturn);
                 Assert.AreEqual(1, context.FeedbacksToApplication.Count);
                 Assert.IsTrue(IsFeedbackEqualToRecordedFeedback(context, feedback, 0));
             }
@@ -47,9 +47,9 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
         public void CanReportTwoMessagesWithDifferentImportance() {
             using (var context = new ApplicationCommandControllerTestExecutionContext()) {
                 var feedback = CreateFeedbackAndReport(context, FeedbackType.ImportantMessage, ImportantTestMessage);
-                Thread.Sleep(ApplicationCommandControllerTestExecutionContext.MilliSecondsToWaitForFeedbackToReturn);
+                Thread.Sleep(ApplicationCommandControllerTestExecutionContext.MillisecondsToWaitForFeedbackToReturn);
                 var anotherFeedback = CreateFeedbackAndReport(context, FeedbackType.MessageOfNoImportance, TestMessageOfNoImportance);
-                Thread.Sleep(ApplicationCommandControllerTestExecutionContext.MilliSecondsToWaitForFeedbackToReturn);
+                Thread.Sleep(ApplicationCommandControllerTestExecutionContext.MillisecondsToWaitForFeedbackToReturn);
                 Assert.AreEqual(2, context.FeedbacksToApplication.Count);
                 Assert.IsTrue(IsFeedbackEqualToRecordedFeedback(context, feedback, 0));
                 Assert.IsTrue(IsFeedbackEqualToRecordedFeedback(context, anotherFeedback, 1));
@@ -57,7 +57,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
         }
 
         [TestMethod, Ignore]
-        public void MassiveFeedbackOfNoImportanceIsReducedAndReportedEvery100MilliSeconds() {
+        public void MassiveFeedbackOfNoImportanceIsReducedAndReportedEvery100Milliseconds() {
             using (var context = new ApplicationCommandControllerTestExecutionContext()) {
                 var feedbacks = new List<IFeedbackToApplication>();
                 IFeedbackToApplication feedback;
@@ -71,7 +71,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
                 Thread.Sleep(100);
                 feedback = CreateFeedbackAndReport(context, FeedbackType.MessageOfNoImportance, "This is the end.");
                 feedbacks.Add(feedback);
-                Thread.Sleep(ApplicationCommandControllerTestExecutionContext.MilliSecondsToWaitForFeedbackToReturn);
+                Thread.Sleep(ApplicationCommandControllerTestExecutionContext.MillisecondsToWaitForFeedbackToReturn);
                 Assert.IsTrue(feedbacks.Count > 2000);
                 Assert.IsTrue(context.FeedbacksToApplication.Count == 3);
                 Assert.IsTrue(IsFeedbackEqualToRecordedFeedback(context, feedbacks[0], 0));

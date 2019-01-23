@@ -25,7 +25,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
                 Assert.IsFalse(context.FeedbacksToApplication.Any(x => x.Type == FeedbackType.CommandExecutionCompleted));
                 Assert.IsFalse(context.FeedbacksToApplication.Any(x => x.Type == FeedbackType.CommandIsDisabled));
                 var task = context.Controller.Execute(typeof(PrimeNumbersCommand));
-                task.Wait(ApplicationCommandControllerTestExecutionContext.MilliSecondsToWaitForFeedbackToReturn);
+                task.Wait(ApplicationCommandControllerTestExecutionContext.MillisecondsToWaitForFeedbackToReturn);
                 Assert.IsTrue(context.FeedbacksToApplication.Any(x => x.Type == FeedbackType.CommandIsDisabled));
             }
         }
@@ -36,7 +36,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
                 Assert.IsFalse(context.FeedbacksToApplication.Any(x => x.Type == FeedbackType.CommandExecutionCompleted));
                 Assert.IsFalse(context.FeedbacksToApplication.Any(x => x.Type == FeedbackType.UnknownCommand));
                 var task = context.Controller.Execute(GetType());
-                task.Wait(ApplicationCommandControllerTestExecutionContext.MilliSecondsToWaitForFeedbackToReturn);
+                task.Wait(ApplicationCommandControllerTestExecutionContext.MillisecondsToWaitForFeedbackToReturn);
                 Assert.IsFalse(context.FeedbacksToApplication.Any(x => x.Type == FeedbackType.CommandExecutionCompleted));
                 Assert.IsTrue(context.FeedbacksToApplication.Any(x => x.Type == FeedbackType.UnknownCommand));
             }

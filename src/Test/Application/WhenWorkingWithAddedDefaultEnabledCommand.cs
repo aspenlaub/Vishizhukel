@@ -52,7 +52,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
                 Assert.IsTrue(context.Controller.Enabled(typeof(PrimeNumbersCommand)));
                 var feedback = new FeedbackToApplication() { Type = FeedbackType.DisableCommand, CommandType = typeof(PrimeNumbersCommand) };
                 context.Context.Report(feedback);
-                Thread.Sleep(ApplicationCommandControllerTestExecutionContext.MilliSecondsToWaitForFeedbackToReturn);
+                Thread.Sleep(ApplicationCommandControllerTestExecutionContext.MillisecondsToWaitForFeedbackToReturn);
                 Assert.IsFalse(context.Controller.Enabled(typeof(PrimeNumbersCommand)));
             }
         }

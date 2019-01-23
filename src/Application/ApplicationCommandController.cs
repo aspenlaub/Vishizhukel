@@ -16,7 +16,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application {
         protected DateTime DoNotReportMessagesOfNoImportanceUntil;
         protected bool IgnoringOfMessagesWasReported;
         protected List<Task> StartedAsynchronousTasks;
-        protected static readonly int ReportMessagesOfNoImportanceEveryHowManyMilliSeconds = 100;
+        protected static readonly int ReportMessagesOfNoImportanceEveryHowManyMilliseconds = 100;
 
         public ApplicationCommandController(Action<IFeedbackToApplication> applicationFeedbackHandler) {
             MainThreadId = Thread.CurrentThread.ManagedThreadId;
@@ -131,7 +131,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application {
                 return true;
             }
 
-            DoNotReportMessagesOfNoImportanceUntil = DateTime.Now.AddMilliseconds(ReportMessagesOfNoImportanceEveryHowManyMilliSeconds);
+            DoNotReportMessagesOfNoImportanceUntil = DateTime.Now.AddMilliseconds(ReportMessagesOfNoImportanceEveryHowManyMilliseconds);
             IgnoringOfMessagesWasReported = false;
             return false;
         }
