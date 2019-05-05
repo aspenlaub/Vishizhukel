@@ -13,12 +13,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Core {
     [TestClass]
     public class TextFileWriterTest {
-        private readonly IComponentProvider vComponentProvider;
-
-        public TextFileWriterTest() {
-            vComponentProvider = new ComponentProvider();
-        }
-
         internal bool AreTheseFilesInTheTestFolder(TextFileWriterTestExecutionContext context, List<string> shortFileNames) {
             var existingFileNames = Directory.GetFiles(context.TestFolder.FullName, "*.*").OrderBy(x => x).ToList();
             return existingFileNames.SequenceEqual(shortFileNames.Select(x => context.TestFolder.FullName + '\\' + x));
@@ -26,7 +20,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Core {
 
         [TestMethod]
         public void CanWriteAFile() {
-            using (var context = new TextFileWriterTestExecutionContext(vComponentProvider)) {
+            using (var context = new TextFileWriterTestExecutionContext()) {
                 context.TextFileWriter.WriteAllLines(context.TestFolder, context.TestFileName, context.Lines, Encoding.UTF8);
                 Assert.IsTrue(File.Exists(context.TestFolder.FullName + '\\' + context.TestFileName));
                 Assert.IsTrue(AreTheseFilesInTheTestFolder(context, new List<string> { context.TestFileName }));
@@ -38,7 +32,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Core {
 
         [TestMethod]
         public void OverwriteFileWithNewContentsCreatesBackupFile() {
-            using (var context = new TextFileWriterTestExecutionContext(vComponentProvider)) {
+            using (var context = new TextFileWriterTestExecutionContext()) {
                 context.TextFileWriter.WriteAllLines(context.TestFolder, context.TestFileName, context.Lines, Encoding.UTF8);
                 Assert.IsTrue(AreTheseFilesInTheTestFolder(context, new List<string> { context.TestFileName }));
                 Assert.IsTrue(context.TextFileWriter.FileExistsAndIsIdentical(context.TestFolder, context.TestFileName, context.Lines, Encoding.UTF8));
@@ -59,7 +53,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Core {
         internal List<string> Lines { get; }
         internal List<string> ChangedLines { get; }
 
-        public TextFileWriterTestExecutionContext(IComponentProvider componentProvider) {
+        public TextFileWriterTestExecutionContext() {
             TextFileWriter = new TextFileWriter();
             var errorsAndInfos = new ErrorsAndInfos();
             TestFolder = new Folder(Path.GetTempPath()).SubFolder("AspenlaubTemp").SubFolder(nameof(TextFileWriterTest));
