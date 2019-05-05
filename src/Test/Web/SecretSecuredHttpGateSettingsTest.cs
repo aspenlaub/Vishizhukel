@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
-using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Web;
+using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities.Web;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
