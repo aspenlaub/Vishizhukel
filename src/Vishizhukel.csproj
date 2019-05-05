@@ -42,7 +42,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Interfaces\Web\" />
     <Folder Include="Web\" />
   </ItemGroup>
 </Project>
