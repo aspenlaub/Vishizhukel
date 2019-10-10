@@ -4,23 +4,30 @@ using System.Linq;
 using System.Threading.Tasks;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
+using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities.Web;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Web;
+using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
     [TestClass]
     public class SecretSecuredHttpGateSettingsTest {
+        private readonly IContainer vContainer;
+
+        public SecretSecuredHttpGateSettingsTest() {
+            vContainer = new ContainerBuilder().RegisterForPegh(new DummyCsArgumentPrompter()).Build();
+        }
+
         [TestMethod]
         public async Task CanGetSecretSecuredHttpGateSettings() {
-            var repository = new SecretRepository(new ComponentProvider());
+            var repository = vContainer.Resolve<ISecretRepository>();
             var securedHttpGateSettingsSecret = new SecretSecuredHttpGateSettings();
             var errorsAndInfos = new ErrorsAndInfos();
             var securedHttpGateSettings = await repository.GetAsync(securedHttpGateSettingsSecret, errorsAndInfos);
             Assert.IsFalse(errorsAndInfos.AnyErrors(), string.Join("\r\n", errorsAndInfos.Errors));
 
-            var componentProvider = new ComponentProvider();
-            var folder = componentProvider.FolderResolver.Resolve(securedHttpGateSettings.LocalhostTempPath, errorsAndInfos);
+            var folder = vContainer.Resolve<IFolderResolver>().Resolve(securedHttpGateSettings.LocalhostTempPath, errorsAndInfos);
             Assert.IsFalse(errorsAndInfos.AnyErrors(), string.Join("\r\n", errorsAndInfos.Errors));
             var file = Directory.GetFiles(folder.FullName, "*.txt").FirstOrDefault();
             if (string.IsNullOrEmpty(file)) { return; }

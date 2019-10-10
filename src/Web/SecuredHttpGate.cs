@@ -4,7 +4,6 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
@@ -15,20 +14,22 @@ using Newtonsoft.Json;
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Web {
     public class SecuredHttpGate : ISecuredHttpGate {
         private readonly IHttpGate vHttpGate;
-        private readonly IComponentProvider vComponentProvider;
         private readonly SecuredHttpGateSettings vSecuredHttpGateSettings;
+        private readonly IFolderResolver vFolderResolver;
+        private readonly IStringCrypter vStringCrypter;
 
-        public SecuredHttpGate(IHttpGate httpGate, SecuredHttpGateSettings securedHttpGateSettings) {
+        public SecuredHttpGate(IHttpGate httpGate, SecuredHttpGateSettings securedHttpGateSettings, IFolderResolver folderResolver, IStringCrypter stringCrypter) {
             vHttpGate = httpGate;
-            vComponentProvider = new ComponentProvider();
             vSecuredHttpGateSettings = securedHttpGateSettings;
+            vFolderResolver = folderResolver;
+            vStringCrypter = stringCrypter;
         }
 
         public async Task<HtmlValidationResult> IsHtmlMarkupValidAsync(string markup) {
             var markupFileName = "";
             if (markup.Length > 10000) {
                 var errorsAndInfos = new ErrorsAndInfos();
-                var folder = vComponentProvider.FolderResolver.Resolve(vSecuredHttpGateSettings.LocalhostTempPath, errorsAndInfos).FullName;
+                var folder = vFolderResolver.Resolve(vSecuredHttpGateSettings.LocalhostTempPath, errorsAndInfos).FullName;
                 if (errorsAndInfos.AnyErrors()) {
                     return new HtmlValidationResult { Success = false, ErrorMessage = errorsAndInfos.ErrorsToString() };
                 }
@@ -56,7 +57,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Web {
                 aliceAndBob.Bob = aliceAndBob.Bob + usables[random.Next(0, usables.Length - 1)];
             }
 
-            aliceAndBob.Alice = vComponentProvider.StringCrypter.Encrypt(DateTime.Now.ToString("yyyy-MM-dd") + aliceAndBob.Bob);
+            aliceAndBob.Alice = vStringCrypter.Encrypt(DateTime.Now.ToString("yyyy-MM-dd") + aliceAndBob.Bob);
             return aliceAndBob;
         }
 

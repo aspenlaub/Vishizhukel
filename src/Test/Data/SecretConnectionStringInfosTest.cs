@@ -4,14 +4,21 @@ using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities.Data;
+using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Data {
     [TestClass]
     public class SecretConnectionStringInfosTest {
+        private readonly IContainer vContainer;
+
+        public SecretConnectionStringInfosTest() {
+            vContainer = new ContainerBuilder().RegisterForPegh(new DummyCsArgumentPrompter()).Build();
+        }
+
         [TestMethod]
         public async Task CanGetSecretConnectionStrings() {
-            var repository = new SecretRepository(new ComponentProvider());
+            var repository = vContainer.Resolve<ISecretRepository>();
             var connectionStringInfosSecret = new SecretConnectionStringInfos();
             var errorsAndInfos = new ErrorsAndInfos();
             var connectionStringInfos = await repository.GetAsync(connectionStringInfosSecret, errorsAndInfos);
