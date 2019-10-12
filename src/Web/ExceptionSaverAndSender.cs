@@ -13,7 +13,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Web {
     public class ExceptionSaverAndSender {
         public static void SaveUnhandledException(IFolder exceptionLogFolder, Exception exception, string source) {
             ExceptionSaver.SaveUnhandledException(exceptionLogFolder, exception, source, e => {
-                var container = new ContainerBuilder().RegisterForPegh(new DummyCsArgumentPrompter()).Build();
+                var container = new ContainerBuilder().UsePegh(new DummyCsArgumentPrompter()).Build();
                 var repository = container.Resolve<ISecretRepository>();
                 var securedHttpGateSettingsSecret = new SecretSecuredHttpGateSettings();
                 var errorsAndInfos = new ErrorsAndInfos();

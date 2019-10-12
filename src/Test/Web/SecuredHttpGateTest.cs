@@ -20,7 +20,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
         protected string ValidMarkup, MarkupWithoutCompatibilityTag;
 
         public SecuredHttpGateTest() {
-            vContainer = new ContainerBuilder().RegisterForPegh(new DummyCsArgumentPrompter()).Build();
+            vContainer = new ContainerBuilder().UsePegh(new DummyCsArgumentPrompter()).Build();
         }
 
         [TestInitialize]

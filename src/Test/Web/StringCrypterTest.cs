@@ -10,7 +10,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
         private readonly IContainer vContainer;
 
         public StringCrypterTest() {
-            vContainer = new ContainerBuilder().RegisterForPegh(new DummyCsArgumentPrompter()).Build();
+            vContainer = new ContainerBuilder().UsePegh(new DummyCsArgumentPrompter()).Build();
         }
 
         [TestMethod]
