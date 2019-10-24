@@ -7,7 +7,8 @@ using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
-using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Core;
+using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Core;
+using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Core {
@@ -46,7 +47,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Core {
     }
 
     internal class TextFileWriterTestExecutionContext : IDisposable {
-        internal TextFileWriter TextFileWriter { get; }
+        internal ITextFileWriter TextFileWriter { get; }
         internal IFolder TestFolder { get; }
         internal string TestFileName { get; }
         internal string TestFileBackup1Name { get; }
@@ -54,7 +55,8 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Core {
         internal List<string> ChangedLines { get; }
 
         public TextFileWriterTestExecutionContext() {
-            TextFileWriter = new TextFileWriter();
+            var container = new ContainerBuilder().UseVishizhukelAndPegh(new DummyCsArgumentPrompter()).Build();
+            TextFileWriter = container.Resolve<ITextFileWriter>();
             var errorsAndInfos = new ErrorsAndInfos();
             TestFolder = new Folder(Path.GetTempPath()).SubFolder("AspenlaubTemp").SubFolder(nameof(TextFileWriterTest));
             Assert.IsFalse(errorsAndInfos.AnyErrors(), errorsAndInfos.ErrorsToString());

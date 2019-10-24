@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Web;
-using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Web;
+using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
@@ -10,9 +11,16 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
     public class HttpGateTest {
         protected IHttpGate Sut;
         protected Uri NonsenseUri;
+
+        private readonly IContainer vContainer;
+
+        public HttpGateTest() {
+            vContainer = new ContainerBuilder().UseVishizhukelAndPegh(new DummyCsArgumentPrompter()).Build();
+        }
+
         [TestInitialize]
         public void Initialize() {
-            Sut = new HttpGate();
+            Sut = vContainer.Resolve<IHttpGate>();
             NonsenseUri = new Uri(@"http://localhost/this/url/is/nonsense.php");
         }
 

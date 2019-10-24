@@ -1,9 +1,10 @@
 ﻿using System.Xml.Serialization;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
+using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Web;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities.Web {
     [XmlRoot("SecuredHttpGateSettings")]
-    public class SecuredHttpGateSettings : ISecretResult<SecuredHttpGateSettings> {
+    public class SecuredHttpGateSettings : ISecretResult<SecuredHttpGateSettings>, ISecuredHttpGateSettings {
         [XmlElement("apiurl")]
         public string ApiUrl { get; set; }
 

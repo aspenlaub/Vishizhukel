@@ -6,7 +6,7 @@ using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities.Web;
-using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Web;
+using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Web;
 using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -16,7 +16,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
         private readonly IContainer vContainer;
 
         public SecretSecuredHttpGateSettingsTest() {
-            vContainer = new ContainerBuilder().UsePegh(new DummyCsArgumentPrompter()).Build();
+            vContainer = new ContainerBuilder().UseVishizhukelAndPegh(new DummyCsArgumentPrompter()).Build();
         }
 
         [TestMethod]
@@ -34,7 +34,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
 
             var contents = File.ReadAllText(file);
             var shortFileName = file.Substring(file.LastIndexOf('\\') + 1);
-            var httpGate = new HttpGate();
+            var httpGate = vContainer.Resolve<IHttpGate>();
             var httpResponseMessage = await httpGate.GetAsync(new Uri(securedHttpGateSettings.LocalhostTempPathUrl + shortFileName));
             var httpContents = await httpResponseMessage.Content.ReadAsStringAsync();
             Assert.AreEqual(contents, httpContents);

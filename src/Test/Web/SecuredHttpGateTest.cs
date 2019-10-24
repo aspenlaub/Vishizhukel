@@ -1,11 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
-using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
-using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
-using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities.Web;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Web;
-using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Web;
 using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -20,20 +16,13 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
         protected string ValidMarkup, MarkupWithoutCompatibilityTag;
 
         public SecuredHttpGateTest() {
-            vContainer = new ContainerBuilder().UsePegh(new DummyCsArgumentPrompter()).Build();
+            vContainer = new ContainerBuilder().UseVishizhukelAndPegh(new DummyCsArgumentPrompter()).Build();
         }
 
         [TestInitialize]
         public void Initialize() {
-            HttpGate = new HttpGate();
-
-            var repository = vContainer.Resolve<ISecretRepository>();
-            var securedHttpGateSettingsSecret = new SecretSecuredHttpGateSettings();
-            var errorsAndInfos = new ErrorsAndInfos();
-            var securedHttpGateSettings = repository.GetAsync(securedHttpGateSettingsSecret, errorsAndInfos).Result;
-            Assert.IsFalse(errorsAndInfos.AnyErrors(), string.Join("\r\n", errorsAndInfos.Errors));
-
-            Sut = new SecuredHttpGate(HttpGate, securedHttpGateSettings, vContainer.Resolve<IFolderResolver>(), vContainer.Resolve<IStringCrypter>());
+            HttpGate = vContainer.Resolve<IHttpGate>();
+            Sut = vContainer.Resolve<ISecuredHttpGate>();
             NonsenseUri = new Uri(@"http://localhost/this/url/is/nonsense.php");
             ValidMarkup = "<html><head><meta http-equiv=\"X-UA-Compatible\" content=\"IE =edge,chrome=1\" ></head><body></body></html>";
             MarkupWithoutCompatibilityTag = "<html><head></head><body></body></html>";

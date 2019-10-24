@@ -3,9 +3,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
+using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Core;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Core {
-    public class TextFileWriter {
+    public class TextFileWriter : ITextFileWriter {
 
         public void WriteAllLines(IFolder folder, string utf8FileName, List<string> lines, Encoding encoding) {
             var fileName = ReplaceInvalidCharacters(utf8FileName);

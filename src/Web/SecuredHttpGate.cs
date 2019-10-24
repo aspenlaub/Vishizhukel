@@ -14,11 +14,11 @@ using Newtonsoft.Json;
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Web {
     public class SecuredHttpGate : ISecuredHttpGate {
         private readonly IHttpGate vHttpGate;
-        private readonly SecuredHttpGateSettings vSecuredHttpGateSettings;
+        private readonly ISecuredHttpGateSettings vSecuredHttpGateSettings;
         private readonly IFolderResolver vFolderResolver;
         private readonly IStringCrypter vStringCrypter;
 
-        public SecuredHttpGate(IHttpGate httpGate, SecuredHttpGateSettings securedHttpGateSettings, IFolderResolver folderResolver, IStringCrypter stringCrypter) {
+        public SecuredHttpGate(IHttpGate httpGate, ISecuredHttpGateSettings securedHttpGateSettings, IFolderResolver folderResolver, IStringCrypter stringCrypter) {
             vHttpGate = httpGate;
             vSecuredHttpGateSettings = securedHttpGateSettings;
             vFolderResolver = folderResolver;

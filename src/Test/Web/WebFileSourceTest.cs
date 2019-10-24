@@ -5,7 +5,7 @@ using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Web;
-using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Web;
+using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
@@ -59,7 +59,8 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
         internal string LocalFileName => LocalFolder.FullName + '\\' + WebFileSourceTest.ReadMeShortFileName;
 
         public WebFileSourceTestExecutionContext() {
-            WebFileSource = new WebFileSource();
+            var container = new ContainerBuilder().UseVishizhukelAndPegh(new DummyCsArgumentPrompter()).Build();
+            WebFileSource = container.Resolve<IWebFileSource>();
             Cleanup();
             LocalFolder.CreateIfNecessary();
         }
