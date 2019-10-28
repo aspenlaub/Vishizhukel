@@ -27,29 +27,26 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
 
         [TestMethod]
         public void CanUpdateLocalFile() {
-            using (var context = new WebFileSourceTestExecutionContext()) {
-                CanUpdateLocalFileAcceptingOrIgnoringResult(context, false, out var fileExistedUpfront, out var upToDate);
-                Assert.IsFalse(fileExistedUpfront);
-                Assert.IsTrue(upToDate);
-            }
+            using var context = new WebFileSourceTestExecutionContext();
+            CanUpdateLocalFileAcceptingOrIgnoringResult(context, false, out var fileExistedUpfront, out var upToDate);
+            Assert.IsFalse(fileExistedUpfront);
+            Assert.IsTrue(upToDate);
         }
 
         [TestMethod]
         public void CanUpdateLocalFileIgnoringTheResult() {
-            using (var context = new WebFileSourceTestExecutionContext()) {
-                CanUpdateLocalFileAcceptingOrIgnoringResult(context, true, out var fileExistedUpfront, out var upToDate);
-                Assert.IsFalse(fileExistedUpfront);
-                Assert.IsFalse(upToDate);
-            }
+            using var context = new WebFileSourceTestExecutionContext();
+            CanUpdateLocalFileAcceptingOrIgnoringResult(context, true, out var fileExistedUpfront, out var upToDate);
+            Assert.IsFalse(fileExistedUpfront);
+            Assert.IsFalse(upToDate);
         }
 
         [TestMethod]
         public void CannotUpdateLocalFileIfUrlIsInValid() {
-            using (var context = new WebFileSourceTestExecutionContext()) {
-                Assert.IsFalse(File.Exists(context.LocalFileName));
-                context.WebFileSource.TryAndUpdateLocalCopyOfWebFile(WrongReadMeUrl, context.LocalFileName, out var upToDate);
-                Assert.IsFalse(upToDate);
-            }
+            using var context = new WebFileSourceTestExecutionContext();
+            Assert.IsFalse(File.Exists(context.LocalFileName));
+            context.WebFileSource.TryAndUpdateLocalCopyOfWebFile(WrongReadMeUrl, context.LocalFileName, out var upToDate);
+            Assert.IsFalse(upToDate);
         }
     }
 

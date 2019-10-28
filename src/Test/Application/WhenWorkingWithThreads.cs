@@ -6,17 +6,15 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
     public class WhenWorkingWithThreads {
         [TestMethod]
         public void CanIdentifyMainThread() {
-            using (var context = new ApplicationCommandControllerTestExecutionContext()) {
-                Assert.IsTrue(context.Controller.IsMainThread());
-            }
+            using var context = new ApplicationCommandControllerTestExecutionContext();
+            Assert.IsTrue(context.Controller.IsMainThread());
         }
 
         [TestMethod]
         public void CanIdentifySecondaryThread() {
-            using (var context = new ApplicationCommandControllerTestExecutionContext()) {
-                var controllerCanIdentifyNonMainThread = ControllerCanIdentifyNonMainThread(context);
-                Assert.IsTrue(controllerCanIdentifyNonMainThread.Result);
-            }
+            using var context = new ApplicationCommandControllerTestExecutionContext();
+            var controllerCanIdentifyNonMainThread = ControllerCanIdentifyNonMainThread(context);
+            Assert.IsTrue(controllerCanIdentifyNonMainThread.Result);
         }
 
         internal async Task<bool> ControllerCanIdentifyNonMainThread(ApplicationCommandControllerTestExecutionContext context) {
