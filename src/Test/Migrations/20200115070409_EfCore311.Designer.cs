@@ -3,12 +3,14 @@ using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Migrations {
     [DbContext(typeof(TestContext))]
-    // ReSharper disable once UnusedMember.Global
-    internal class TestContextModelSnapshot : ModelSnapshot {
-        protected override void BuildModel(ModelBuilder modelBuilder) {
+    [Migration("20200115070409_EfCore311")]
+    partial class EfCore311 {
+        protected override void BuildTargetModel(ModelBuilder modelBuilder) {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.1")
