@@ -1,4 +1,5 @@
 ﻿using System;
+using Aspenlaub.Net.GitHub.CSharp.Dvin.Components;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Extensions;
@@ -15,7 +16,19 @@ using Autofac;
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel {
     public static class VishizhukelContainerBuilder {
         public static ContainerBuilder UseVishizhukelAndPegh(this ContainerBuilder builder, ICsArgumentPrompter csArgumentPrompter) {
-            builder.UsePegh(csArgumentPrompter);
+            return UseVishizhukelAndPeghOptionallyDvin(builder, csArgumentPrompter, false);
+        }
+
+        public static ContainerBuilder UseVishizhukelDvinAndPegh(this ContainerBuilder builder, ICsArgumentPrompter csArgumentPrompter) {
+            return UseVishizhukelAndPeghOptionallyDvin(builder, csArgumentPrompter, true);
+        }
+
+        private static ContainerBuilder UseVishizhukelAndPeghOptionallyDvin(ContainerBuilder builder, ICsArgumentPrompter csArgumentPrompter, bool useDvin) {
+            if (useDvin) {
+                builder.UseDvinAndPegh(csArgumentPrompter);
+            } else {
+                builder.UsePegh(csArgumentPrompter);
+            }
 
             var peghContainer = new ContainerBuilder().UsePegh(csArgumentPrompter).Build();
             var repository = peghContainer.Resolve<ISecretRepository>();
@@ -25,6 +38,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel {
             if (errorsAndInfos.AnyErrors()) {
                 throw new Exception(errorsAndInfos.ErrorsToString());
             }
+
             builder.RegisterInstance<ISecuredHttpGateSettings>(securedHttpGateSettings);
 
             builder.RegisterType<ApplicationLog>().As<IApplicationLog>();
