@@ -3,12 +3,13 @@ using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Migrations {
     [DbContext(typeof(TestContext))]
-    // ReSharper disable once UnusedMember.Global
-    internal class TestContextModelSnapshot : ModelSnapshot {
-        protected override void BuildModel(ModelBuilder modelBuilder) {
+    [Migration("20210216183459_EfCore503")]
+    partial class EfCore503 {
+        protected override void BuildTargetModel(ModelBuilder modelBuilder) {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
