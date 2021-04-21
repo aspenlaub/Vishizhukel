@@ -11,8 +11,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
     [TestClass]
     public class WebFileSourceTest {
-        private const string ReadMeUrl = "https://raw.githubusercontent.com/aspenlaub/Vishizhukel/master/README.md";
-        private const string WrongReadMeUrl = "https://raw.githubusercontent.com/aspenlaub/Vishizhukel/master/MEREAD.md";
+        private const string ReadMeUrl = "https://raw.githubusercontent.com/aspenlaub/Vishizhukel/master/build.cmd";
+        private const string WrongReadMeUrl = "https://raw.githubusercontent.com/aspenlaub/Vishizhukel/master/duilb.cmd";
         internal const string ReadMeShortFileName = "README.md";
 
         private void CanUpdateLocalFileAcceptingOrIgnoringResult(WebFileSourceTestExecutionContext context, bool ignoreResult, out bool fileExistedUpfront, out bool upToDate) {

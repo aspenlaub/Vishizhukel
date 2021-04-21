@@ -12,6 +12,7 @@ using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Core;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Web;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Web;
 using Autofac;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel {
     public static class VishizhukelContainerBuilder {
