@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Aspenlaub.Net.GitHub.CSharp.Dvin.Components;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
@@ -17,22 +18,22 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel {
     public static class VishizhukelContainerBuilder {
-        public static ContainerBuilder UseVishizhukelAndPegh(this ContainerBuilder builder, ICsArgumentPrompter csArgumentPrompter) {
-            return UseVishizhukelAndPeghOptionallyDvin(builder, csArgumentPrompter, false);
+        public static async Task<ContainerBuilder> UseVishizhukelAndPeghAsync(this ContainerBuilder builder, ICsArgumentPrompter csArgumentPrompter) {
+            return await UseVishizhukelAndPeghOptionallyDvinAsync(builder, csArgumentPrompter, false);
         }
 
-        public static ContainerBuilder UseVishizhukelDvinAndPegh(this ContainerBuilder builder, ICsArgumentPrompter csArgumentPrompter) {
-            return UseVishizhukelAndPeghOptionallyDvin(builder, csArgumentPrompter, true);
+        public static async Task<ContainerBuilder> UseVishizhukelDvinAndPeghAsync(this ContainerBuilder builder, ICsArgumentPrompter csArgumentPrompter) {
+            return await UseVishizhukelAndPeghOptionallyDvinAsync(builder, csArgumentPrompter, true);
         }
 
-        private static ContainerBuilder UseVishizhukelAndPeghOptionallyDvin(ContainerBuilder builder, ICsArgumentPrompter csArgumentPrompter, bool useDvin) {
+        private static async Task<ContainerBuilder> UseVishizhukelAndPeghOptionallyDvinAsync(ContainerBuilder builder, ICsArgumentPrompter csArgumentPrompter, bool useDvin) {
             if (useDvin) {
                 builder.UseDvinAndPegh(csArgumentPrompter);
             } else {
                 builder.UsePegh(csArgumentPrompter);
             }
 
-            var securedHttpGateSettings = CreateSecuredHttpGateSettings(csArgumentPrompter);
+            var securedHttpGateSettings = await CreateSecuredHttpGateSettingsAsync(csArgumentPrompter);
             builder.RegisterInstance<ISecuredHttpGateSettings>(securedHttpGateSettings);
 
             builder.RegisterType<ApplicationLog>().As<IApplicationLog>();
@@ -43,22 +44,22 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel {
             return builder;
         }
 
-        public static IServiceCollection UseVishizhukelAndPegh(this IServiceCollection services, ICsArgumentPrompter csArgumentPrompter) {
-            return UseVishizhukelAndPeghOptionallyDvin(services, csArgumentPrompter, false);
+        public static async Task<IServiceCollection> UseVishizhukelAndPeghAsync(this IServiceCollection services, ICsArgumentPrompter csArgumentPrompter) {
+            return await UseVishizhukelAndPeghOptionallyDvinAsync(services, csArgumentPrompter, false);
         }
 
-        public static IServiceCollection UseVishizhukelDvinAndPegh(this IServiceCollection services, ICsArgumentPrompter csArgumentPrompter) {
-            return UseVishizhukelAndPeghOptionallyDvin(services, csArgumentPrompter, true);
+        public static async Task<IServiceCollection> UseVishizhukelDvinAndPeghAsync(this IServiceCollection services, ICsArgumentPrompter csArgumentPrompter) {
+            return await UseVishizhukelAndPeghOptionallyDvinAsync(services, csArgumentPrompter, true);
         }
 
-        private static IServiceCollection UseVishizhukelAndPeghOptionallyDvin(this IServiceCollection services, ICsArgumentPrompter csArgumentPrompter, bool useDvin) {
+        private static async Task<IServiceCollection> UseVishizhukelAndPeghOptionallyDvinAsync(this IServiceCollection services, ICsArgumentPrompter csArgumentPrompter, bool useDvin) {
             if (useDvin) {
                 services.UseDvinAndPegh(csArgumentPrompter);
             } else {
                 services.UsePegh(csArgumentPrompter);
             }
 
-            var securedHttpGateSettings = CreateSecuredHttpGateSettings(csArgumentPrompter);
+            var securedHttpGateSettings = await CreateSecuredHttpGateSettingsAsync(csArgumentPrompter);
             services.AddSingleton<ISecuredHttpGateSettings>(securedHttpGateSettings);
 
             services.AddTransient<IApplicationLog, ApplicationLog>();
@@ -69,12 +70,12 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel {
             return services;
         }
 
-        private static SecuredHttpGateSettings CreateSecuredHttpGateSettings(ICsArgumentPrompter csArgumentPrompter) {
+        private static async Task<SecuredHttpGateSettings> CreateSecuredHttpGateSettingsAsync(ICsArgumentPrompter csArgumentPrompter) {
             var peghContainer = new ContainerBuilder().UsePegh(csArgumentPrompter).Build();
             var repository = peghContainer.Resolve<ISecretRepository>();
             var securedHttpGateSettingsSecret = new SecretSecuredHttpGateSettings();
             var errorsAndInfos = new ErrorsAndInfos();
-            var securedHttpGateSettings = repository.GetAsync(securedHttpGateSettingsSecret, errorsAndInfos).Result;
+            var securedHttpGateSettings = await repository.GetAsync(securedHttpGateSettingsSecret, errorsAndInfos);
             if (errorsAndInfos.AnyErrors()) {
                 throw new Exception(errorsAndInfos.ErrorsToString());
             }

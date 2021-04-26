@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
 using Autofac;
@@ -14,12 +15,12 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
         }
 
         [TestMethod]
-        public void CanEncryptAndDecryptStrings() {
+        public async Task CanEncryptAndDecryptStrings() {
             var sampleStrings = new List<string>() { "W", "Wolfgang", "Ärger", "50€", "Schnipp ✂", "❤ Love" };
             var crypter = vContainer.Resolve<IStringCrypter>();
             foreach (var s in sampleStrings) {
-                var sEncrypted = crypter.Encrypt(s);
-                var sDecrypted = crypter.Decrypt(sEncrypted);
+                var sEncrypted = await crypter.EncryptAsync(s);
+                var sDecrypted = await crypter.DecryptAsync(sEncrypted);
                 Assert.AreEqual(s, sDecrypted);
             }
         }

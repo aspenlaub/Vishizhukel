@@ -16,7 +16,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
         private readonly IContainer vContainer;
 
         public SecretSecuredHttpGateSettingsTest() {
-            vContainer = new ContainerBuilder().UseVishizhukelAndPegh(new DummyCsArgumentPrompter()).Build();
+            vContainer = new ContainerBuilder().UseVishizhukelAndPeghAsync(new DummyCsArgumentPrompter()).Result.Build();
         }
 
         [TestMethod]
@@ -27,12 +27,12 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
             var securedHttpGateSettings = await repository.GetAsync(securedHttpGateSettingsSecret, errorsAndInfos);
             Assert.IsFalse(errorsAndInfos.AnyErrors(), string.Join("\r\n", errorsAndInfos.Errors));
 
-            var folder = vContainer.Resolve<IFolderResolver>().Resolve(securedHttpGateSettings.LocalhostTempPath, errorsAndInfos);
+            var folder = await vContainer.Resolve<IFolderResolver>().ResolveAsync(securedHttpGateSettings.LocalhostTempPath, errorsAndInfos);
             Assert.IsFalse(errorsAndInfos.AnyErrors(), string.Join("\r\n", errorsAndInfos.Errors));
             var file = Directory.GetFiles(folder.FullName, "*.txt").FirstOrDefault();
             if (string.IsNullOrEmpty(file)) { return; }
 
-            var contents = File.ReadAllText(file);
+            var contents = await File.ReadAllTextAsync(file);
             var shortFileName = file.Substring(file.LastIndexOf('\\') + 1);
             var httpGate = vContainer.Resolve<IHttpGate>();
             var httpResponseMessage = await httpGate.GetAsync(new Uri(securedHttpGateSettings.LocalhostTempPathUrl + shortFileName));

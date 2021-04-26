@@ -53,7 +53,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Core {
         internal List<string> ChangedLines { get; }
 
         public TextFileWriterTestExecutionContext() {
-            var container = new ContainerBuilder().UseVishizhukelAndPegh(new DummyCsArgumentPrompter()).Build();
+            var container = new ContainerBuilder().UseVishizhukelAndPeghAsync(new DummyCsArgumentPrompter()).Result.Build();
             TextFileWriter = container.Resolve<ITextFileWriter>();
             var errorsAndInfos = new ErrorsAndInfos();
             TestFolder = new Folder(Path.GetTempPath()).SubFolder("AspenlaubTemp").SubFolder(nameof(TextFileWriterTest));

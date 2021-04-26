@@ -15,7 +15,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
         private readonly IContainer vContainer;
 
         public HttpGateTest() {
-            vContainer = new ContainerBuilder().UseVishizhukelDvinAndPegh(new DummyCsArgumentPrompter()).Build();
+            vContainer = new ContainerBuilder().UseVishizhukelDvinAndPeghAsync(new DummyCsArgumentPrompter()).Result.Build();
         }
 
         [TestInitialize]

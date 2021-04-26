@@ -3,14 +3,13 @@ using System.IO;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Core {
-    // ReSharper disable once UnusedMember.Global
     public class ExceptionSaver {
-        // ReSharper disable once UnusedMember.Global
-        public static void SaveUnhandledException(IFolder exceptionLogFolder, Exception exception, string source, Action<SavedException> onExceptionSaved) {
+        public static async Task SaveUnhandledExceptionAsync(IFolder exceptionLogFolder, Exception exception, string source, Func<SavedException, Task> onExceptionSaved) {
             var assemblyName = Assembly.GetExecutingAssembly().GetName();
             var title = $"Unhandled exception in {assemblyName.Name} v{assemblyName.Version}";
             var message = exception.Message;
@@ -20,10 +19,10 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Core {
                 innerMessage = exception.InnerException.Message;
                 innerStackTrace = exception.InnerException.StackTrace;
             }
-            SaveException(exceptionLogFolder, title, message, stackTrace, innerMessage, innerStackTrace, onExceptionSaved);
+            await SaveExceptionAsync(exceptionLogFolder, title, message, stackTrace, innerMessage, innerStackTrace, onExceptionSaved);
         }
 
-        private static void SaveException(IFolder exceptionLogFolder, string title, string message, string stackTrace, string innerMessage, string innerStackTrace, Action<SavedException> onExceptionSaved) {
+        private static async Task SaveExceptionAsync(IFolder exceptionLogFolder, string title, string message, string stackTrace, string innerMessage, string innerStackTrace, Func<SavedException, Task> onExceptionSaved) {
             exceptionLogFolder.CreateIfNecessary();
 
             var fileContents = "Title:\r\n" + title + "\r\nMessage:\r\n" + message + "\r\nStack trace:\r\n" + stackTrace + "\r\nInner message:\r\n" + innerMessage + "\r\nInner stack trace:\r\n" + innerStackTrace;
@@ -35,14 +34,14 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Core {
 
             var exceptionName = "Exception-" + sb;
             var fileName = exceptionLogFolder.FullName + '\\' + exceptionName + ".txt";
-            File.WriteAllText(fileName, fileContents);
+            await File.WriteAllTextAsync(fileName, fileContents);
 
             var savedException = new SavedException {
                 ExceptionName = exceptionName,
                 FileContents = fileContents,
                 FileFullName = fileName
             };
-            onExceptionSaved(savedException);
+            await onExceptionSaved(savedException);
         }
     }
 
