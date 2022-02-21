@@ -2,11 +2,13 @@
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Migrations {
     [DbContext(typeof(TestContext))]
-    partial class TestContextModelSnapshot : ModelSnapshot {
-        protected override void BuildModel(ModelBuilder modelBuilder) {
+    [Migration("20220221194225_EntityFrameworkCore602")]
+    partial class EntityFrameworkCore602 {
+        protected override void BuildTargetModel(ModelBuilder modelBuilder) {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "6.0.2")
