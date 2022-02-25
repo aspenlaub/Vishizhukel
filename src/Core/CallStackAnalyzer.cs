@@ -18,13 +18,13 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Core {
             var stackFrames = stackFramesArray.ToList();
             stackFrames.RemoveRange(0, numberOfFramesToIgnore);
             var method = stackFrames[0].GetMethod();
-            isStatic = method.IsStatic;
+            isStatic = method?.IsStatic == true;
             if (method == null || method.DeclaringType == null) {
                 throw new NullReferenceException("Could not get stack frames");
             }
 
             fullyQualifiedMethodName = method.DeclaringType.Namespace + '.' + method.Name;
-            constructor = stackFrames.Any(s => s.GetMethod().IsConstructor);
+            constructor = stackFrames.Any(s => s?.GetMethod()?.IsConstructor == true);
         }
     }
 }

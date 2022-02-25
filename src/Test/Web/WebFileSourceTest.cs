@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Extensions;
@@ -15,37 +16,41 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
         private const string WrongReadMeUrl = "https://raw.githubusercontent.com/aspenlaub/Vishizhukel/master/duilb.cmd";
         internal const string ReadMeShortFileName = "README.md";
 
-        private void CanUpdateLocalFileAcceptingOrIgnoringResult(WebFileSourceTestExecutionContext context, bool ignoreResult, out bool fileExistedUpfront, out bool upToDate) {
-            fileExistedUpfront = File.Exists(context.LocalFileName);
-            upToDate = false;
+        private async Task<UpdateResult> CanUpdateLocalFileAcceptingOrIgnoringResultAsync(WebFileSourceTestExecutionContext context, bool ignoreResult) {
+            var result = new UpdateResult {
+                FileExistedUpfront = File.Exists(context.LocalFileName),
+                UpToDate = false
+            };
             if (ignoreResult) {
-                context.WebFileSource.TryAndUpdateLocalCopyOfWebFile(ReadMeUrl, context.LocalFileName);
+                await context.WebFileSource.TryAndUpdateLocalCopyOfWebFileAsync(ReadMeUrl, context.LocalFileName);
             } else {
-                context.WebFileSource.TryAndUpdateLocalCopyOfWebFile(ReadMeUrl, context.LocalFileName, out upToDate);
+                result.UpToDate = await context.WebFileSource.TryAndUpdateLocalCopyOfWebFileReturnUpToDateAsync(ReadMeUrl, context.LocalFileName);
             }
+
+            return result;
         }
 
         [TestMethod]
-        public void CanUpdateLocalFile() {
+        public async Task CanUpdateLocalFile() {
             using var context = new WebFileSourceTestExecutionContext();
-            CanUpdateLocalFileAcceptingOrIgnoringResult(context, false, out var fileExistedUpfront, out var upToDate);
-            Assert.IsFalse(fileExistedUpfront);
-            Assert.IsTrue(upToDate);
+            var result = await CanUpdateLocalFileAcceptingOrIgnoringResultAsync(context, false);
+            Assert.IsFalse(result.FileExistedUpfront);
+            Assert.IsTrue(result.UpToDate);
         }
 
         [TestMethod]
-        public void CanUpdateLocalFileIgnoringTheResult() {
+        public async Task CanUpdateLocalFileIgnoringTheResult() {
             using var context = new WebFileSourceTestExecutionContext();
-            CanUpdateLocalFileAcceptingOrIgnoringResult(context, true, out var fileExistedUpfront, out var upToDate);
-            Assert.IsFalse(fileExistedUpfront);
-            Assert.IsFalse(upToDate);
+            var result = await CanUpdateLocalFileAcceptingOrIgnoringResultAsync(context, true);
+            Assert.IsFalse(result.FileExistedUpfront);
+            Assert.IsFalse(result.UpToDate);
         }
 
         [TestMethod]
-        public void CannotUpdateLocalFileIfUrlIsInValid() {
+        public async Task CannotUpdateLocalFileIfUrlIsInValid() {
             using var context = new WebFileSourceTestExecutionContext();
             Assert.IsFalse(File.Exists(context.LocalFileName));
-            context.WebFileSource.TryAndUpdateLocalCopyOfWebFile(WrongReadMeUrl, context.LocalFileName, out var upToDate);
+            var upToDate = await context.WebFileSource.TryAndUpdateLocalCopyOfWebFileReturnUpToDateAsync(WrongReadMeUrl, context.LocalFileName);
             Assert.IsFalse(upToDate);
         }
     }
@@ -77,5 +82,10 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
             var folderDeleter = new FolderDeleter();
             folderDeleter.DeleteFolder(LocalFolder);
         }
+    }
+
+    internal class UpdateResult {
+        public bool FileExistedUpfront { get; set; }
+        public bool UpToDate { get; set; }
     }
 }

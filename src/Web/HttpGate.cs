@@ -8,7 +8,7 @@ using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Web;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Web {
     public class HttpGate : IHttpGate {
-        private HttpClient Client { get; } = new HttpClient();
+        private HttpClient Client { get; } = new();
         private const string LocalhostUrl = "http://localhost/";
         private const string AspenlaubUrl = "https://github.com/aspenlaub";
 
@@ -32,7 +32,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Web {
 
         public async Task<bool> IsLocalHostAvailableAsync() {
             var response = await GetAsync(new Uri(LocalhostUrl));
-            return response.StatusCode == HttpStatusCode.OK && response.Headers.Server.Any(s => s.Product.Name.Contains("Apache"));
+            return response.StatusCode == HttpStatusCode.OK && response.Headers.Server.Any(s => s.Product?.Name.Contains("Apache") == true);
         }
 
         public async Task<bool> AreWeOnlineAsync() {

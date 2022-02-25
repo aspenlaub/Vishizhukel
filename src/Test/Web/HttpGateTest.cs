@@ -12,15 +12,15 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
         protected IHttpGate Sut;
         protected Uri NonsenseUri;
 
-        private readonly IContainer vContainer;
+        private readonly IContainer Container;
 
         public HttpGateTest() {
-            vContainer = new ContainerBuilder().UseVishizhukelDvinAndPeghAsync(new DummyCsArgumentPrompter()).Result.Build();
+            Container = new ContainerBuilder().UseVishizhukelDvinAndPeghAsync(new DummyCsArgumentPrompter()).Result.Build();
         }
 
         [TestInitialize]
         public void Initialize() {
-            Sut = vContainer.Resolve<IHttpGate>();
+            Sut = Container.Resolve<IHttpGate>();
             NonsenseUri = new Uri(@"http://localhost/this/url/is/nonsense.php");
         }
 

@@ -11,7 +11,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
             using var context = new ApplicationCommandControllerTestExecutionContext();
             context.Controller.AddCommand(new PrimeNumbersCommand(), true);
             Assert.IsFalse(context.FeedbacksToApplication.Any(x => x.Type == FeedbackType.CommandExecutionCompleted));
-            await context.Controller.Execute(typeof(PrimeNumbersCommand));
+            await context.Controller.ExecuteAsync(typeof(PrimeNumbersCommand));
             await context.Controller.AwaitAllAsynchronousTasks();
             var feedbacksToApplication = context.GetFeedbacksToApplication();
             Assert.IsTrue(feedbacksToApplication.Any(x => x.Type == FeedbackType.CommandExecutionCompleted));
@@ -23,7 +23,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
             context.Controller.AddCommand(new PrimeNumbersCommand(), false);
             Assert.IsFalse(context.FeedbacksToApplication.Any(x => x.Type == FeedbackType.CommandExecutionCompleted));
             Assert.IsFalse(context.FeedbacksToApplication.Any(x => x.Type == FeedbackType.CommandIsDisabled));
-            var task = context.Controller.Execute(typeof(PrimeNumbersCommand));
+            var task = context.Controller.ExecuteAsync(typeof(PrimeNumbersCommand));
             task.Wait(ApplicationCommandControllerTestExecutionContext.MillisecondsToWaitForFeedbackToReturn);
             Assert.IsTrue(context.FeedbacksToApplication.Any(x => x.Type == FeedbackType.CommandIsDisabled));
         }
@@ -33,7 +33,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
             using var context = new ApplicationCommandControllerTestExecutionContext();
             Assert.IsFalse(context.FeedbacksToApplication.Any(x => x.Type == FeedbackType.CommandExecutionCompleted));
             Assert.IsFalse(context.FeedbacksToApplication.Any(x => x.Type == FeedbackType.UnknownCommand));
-            var task = context.Controller.Execute(GetType());
+            var task = context.Controller.ExecuteAsync(GetType());
             task.Wait(ApplicationCommandControllerTestExecutionContext.MillisecondsToWaitForFeedbackToReturn);
             Assert.IsFalse(context.FeedbacksToApplication.Any(x => x.Type == FeedbackType.CommandExecutionCompleted));
             Assert.IsTrue(context.FeedbacksToApplication.Any(x => x.Type == FeedbackType.UnknownCommand));

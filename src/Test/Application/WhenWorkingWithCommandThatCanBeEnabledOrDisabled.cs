@@ -5,9 +5,9 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
     [TestClass]
     public class WhenWorkingWithCommandThatCanBeEnabledOrDisabled {
         [TestMethod]
-        public void CommandIsNotEnabledForNewController() {
+        public async Task CommandIsNotEnabledForNewController() {
             using var context = new ApplicationCommandControllerTestExecutionContext();
-            Assert.IsFalse(context.Controller.Enabled(typeof(PrimeNumbersCommand)));
+            Assert.IsFalse(await context.Controller.EnabledAsync(typeof(PrimeNumbersCommand)));
         }
 
         [TestMethod]

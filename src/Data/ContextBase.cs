@@ -69,7 +69,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Data {
             }
 
             var result = -1;
-            UiSynchronizationContext.Send(x => {
+            UiSynchronizationContext.Send(_ => {
                 result = base.SaveChanges(acceptAllChangesOnSuccess);
             }, null);
             return result;
@@ -87,12 +87,12 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Data {
         }
 
         protected bool Add<T>(object entity, DbSet<T> entitySet) where T : class, IGuid {
-            if (!(entity is T)) { return false; }
+            if (!(entity is T guid)) { return false; }
 
             if (UiSynchronizationContext == null) {
-                entitySet.Add((T)entity);
+                entitySet.Add(guid);
             } else {
-                UiSynchronizationContext.Send(x => entitySet.Add((T)entity), null);
+                UiSynchronizationContext.Send(_ => entitySet.Add((T)entity), null);
             }
             return true;
         }
@@ -118,7 +118,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Data {
             if (UiSynchronizationContext == null) {
                 entitySet.Remove((T)entity);
             } else {
-                UiSynchronizationContext.Send(x => entitySet.Remove((T)entity), null);
+                UiSynchronizationContext.Send(_ => entitySet.Remove((T)entity), null);
             }
             return true;
         }

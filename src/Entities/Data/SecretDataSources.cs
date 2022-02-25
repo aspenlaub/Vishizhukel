@@ -2,9 +2,9 @@
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities.Data {
     public class SecretDataSources : ISecret<DataSources> {
-        private DataSources vDefaultValue;
+        private DataSources PrivateDefaultValue;
 
-        public DataSources DefaultValue => vDefaultValue ?? (vDefaultValue = new DataSources() );
+        public DataSources DefaultValue => PrivateDefaultValue ??= new DataSources();
 
         public string Guid => "89DE3BA2-8479-432A-ACAA-62DCBF2F7A44";
     }

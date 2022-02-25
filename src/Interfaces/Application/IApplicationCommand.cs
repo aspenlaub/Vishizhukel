@@ -5,7 +5,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Application {
         bool MakeLogEntries { get; }
         string Name { get; }
 
-        bool CanExecute();
-        Task Execute(IApplicationCommandExecutionContext context);
+        Task<bool> CanExecuteAsync();
+        Task ExecuteAsync(IApplicationCommandExecutionContext context);
     }
 }

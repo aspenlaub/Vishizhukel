@@ -7,11 +7,11 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
         public bool MakeLogEntries => true;
         public string Name => Properties.Resources.PrimeNumbersCommandName;
 
-        public bool CanExecute() {
-            return true;
+        public async Task<bool> CanExecuteAsync() {
+            return await Task.FromResult(true);
         }
 
-        public async Task Execute(IApplicationCommandExecutionContext context) {
+        public async Task ExecuteAsync(IApplicationCommandExecutionContext context) {
             context.Report("Starting calculating prime numbers, disable command for the moment", false);
             context.Report(new FeedbackToApplication() { Type = FeedbackType.DisableCommand, CommandType = GetType() });
             var task = CalculatePrimeNumbers(true, context);

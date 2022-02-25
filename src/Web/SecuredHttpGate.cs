@@ -13,33 +13,33 @@ using Newtonsoft.Json;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Web {
     public class SecuredHttpGate : ISecuredHttpGate {
-        private readonly IHttpGate vHttpGate;
-        private readonly ISecuredHttpGateSettings vSecuredHttpGateSettings;
-        private readonly IFolderResolver vFolderResolver;
-        private readonly IStringCrypter vStringCrypter;
+        private readonly IHttpGate HttpGate;
+        private readonly ISecuredHttpGateSettings SecuredHttpGateSettings;
+        private readonly IFolderResolver FolderResolver;
+        private readonly IStringCrypter StringCrypter;
 
         public SecuredHttpGate(IHttpGate httpGate, ISecuredHttpGateSettings securedHttpGateSettings, IFolderResolver folderResolver, IStringCrypter stringCrypter) {
-            vHttpGate = httpGate;
-            vSecuredHttpGateSettings = securedHttpGateSettings;
-            vFolderResolver = folderResolver;
-            vStringCrypter = stringCrypter;
+            HttpGate = httpGate;
+            SecuredHttpGateSettings = securedHttpGateSettings;
+            FolderResolver = folderResolver;
+            StringCrypter = stringCrypter;
         }
 
         public async Task<HtmlValidationResult> IsHtmlMarkupValidAsync(string markup) {
             var markupFileName = "";
             if (markup.Length > 10000) {
                 var errorsAndInfos = new ErrorsAndInfos();
-                var folder = (await vFolderResolver.ResolveAsync(vSecuredHttpGateSettings.LocalhostTempPath, errorsAndInfos)).FullName;
+                var folder = (await FolderResolver.ResolveAsync(SecuredHttpGateSettings.LocalhostTempPath, errorsAndInfos)).FullName;
                 if (errorsAndInfos.AnyErrors()) {
                     return new HtmlValidationResult { Success = false, ErrorMessage = errorsAndInfos.ErrorsToString() };
                 }
                 var shortFileName = "Markup" + markup.GetHashCode() + ".xml";
                 markupFileName = folder + "\\" + shortFileName;
-                File.WriteAllText(markupFileName, markup, Encoding.UTF8);
-                markup = vSecuredHttpGateSettings.LocalhostTempPathUrl + shortFileName;
+                await File.WriteAllTextAsync(markupFileName, markup, Encoding.UTF8);
+                markup = SecuredHttpGateSettings.LocalhostTempPathUrl + shortFileName;
             }
             var aliceAndBob = await CreateAliceAndBobAsync();
-            var response = await vHttpGate.PostAsync(vSecuredHttpGateSettings.ApiUrl, new Dictionary<string, string> { { "markup", markup }, { "alice", aliceAndBob.Alice }, { "bob", aliceAndBob.Bob }, { "command", "ValidateMarkup" } });
+            var response = await HttpGate.PostAsync(SecuredHttpGateSettings.ApiUrl, new Dictionary<string, string> { { "markup", markup }, { "alice", aliceAndBob.Alice }, { "bob", aliceAndBob.Bob }, { "command", "ValidateMarkup" } });
             if (markupFileName != "") {
                 File.Delete(markupFileName);
             }
@@ -57,20 +57,20 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Web {
                 aliceAndBob.Bob = aliceAndBob.Bob + usables[random.Next(0, usables.Length - 1)];
             }
 
-            aliceAndBob.Alice = await vStringCrypter.EncryptAsync(DateTime.Now.ToString("yyyy-MM-dd") + aliceAndBob.Bob);
+            aliceAndBob.Alice = await StringCrypter.EncryptAsync(DateTime.Now.ToString("yyyy-MM-dd") + aliceAndBob.Bob);
             return aliceAndBob;
         }
 
         public async Task<bool> RegisterDefectAsync(string headline, string description, bool old) {
             var aliceAndBob = await CreateAliceAndBobAsync();
-            var response = await vHttpGate.PostAsync(vSecuredHttpGateSettings.ApiUrl, new Dictionary<string, string> {
+            var response = await HttpGate.PostAsync(SecuredHttpGateSettings.ApiUrl, new Dictionary<string, string> {
                 { "headline", headline }, { "description", description }, { "alice", aliceAndBob.Alice }, { "bob", aliceAndBob.Bob }, { "command", old ? "RegisterOldDefect" : "RegisterDefect" }, { "source", "main" }
             });
             if (response.StatusCode != HttpStatusCode.OK) { return false; }
 
             var json = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<HtmlValidationResult>(json);
-            return result.Success;
+            return result?.Success == true;
         }
     }
 }

@@ -40,7 +40,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application {
 
         protected async Task DisableCommandRunTaskAndEnableCommand(IApplicationCommand command) {
             await DisableCommand(command.GetType());
-            await command.Execute(this);
+            await command.ExecuteAsync(this);
             await EnableCommand(command.GetType());
         }
 
@@ -77,7 +77,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application {
             return Thread.CurrentThread.ManagedThreadId == MainThreadId;
         }
 
-        public async Task Execute(Type commandType) {
+        public async Task ExecuteAsync(Type commandType) {
             var command = Commands.FirstOrDefault(x => x.GetType() == commandType);
             if (command == null) {
                 FeedbackToApplicationRegistry.Report(new FeedbackToApplication() { Type = FeedbackType.UnknownCommand, CommandType = commandType });
@@ -85,7 +85,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application {
                 return;
             }
 
-            if (!Enabled(commandType)) {
+            if (!await EnabledAsync(commandType)) {
                 FeedbackToApplicationRegistry.Report(new FeedbackToApplication() { Type = FeedbackType.CommandIsDisabled, CommandType = commandType });
                 await RunTask(Task.Delay(50));
                 return;
@@ -145,8 +145,8 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application {
         }
 
         private async Task EnableOrDisableCommand(Type commandType, bool enable) {
+            var wasEnabled = await EnabledAsync(commandType);
             lock (this) {
-                var wasEnabled = Enabled(commandType);
                 if (enable) {
                     EnableRequests[commandType]++;
                 } else {
@@ -156,15 +156,16 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application {
                     DisableRequests[commandType] = 0;
                     EnableRequests[commandType] = 0;
                 }
-                if (wasEnabled == Enabled(commandType)) { return; }
             }
+            if (wasEnabled == await EnabledAsync(commandType)) { return; }
 
             FeedbackToApplicationRegistry.Report(new FeedbackToApplication() { Type = FeedbackType.CommandsEnabledOrDisabled });
             await RunTask(Task.Delay(50));
         }
 
-        public bool Enabled(Type commandType) {
+        public async Task<bool> EnabledAsync(Type commandType) {
             bool enabled;
+            IApplicationCommand command;
             lock (this) {
                 if (!DefaultEnabled.Keys.Contains(commandType)) {
                     enabled = false;
@@ -175,11 +176,10 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application {
                 }
                 if (!enabled) { return false; }
 
-                var command = Commands.FirstOrDefault(x => x.GetType() == commandType);
-                // ReSharper disable once MergeSequentialChecksWhenPossible
-                enabled = command != null && command.CanExecute();
+                command = Commands.FirstOrDefault(x => x.GetType() == commandType);
             }
 
+            enabled = command != null && await command.CanExecuteAsync();
             return enabled;
         }
 

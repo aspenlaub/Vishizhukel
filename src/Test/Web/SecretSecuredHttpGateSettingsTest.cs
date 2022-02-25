@@ -13,28 +13,28 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
     [TestClass]
     public class SecretSecuredHttpGateSettingsTest {
-        private readonly IContainer vContainer;
+        private readonly IContainer Container;
 
         public SecretSecuredHttpGateSettingsTest() {
-            vContainer = new ContainerBuilder().UseVishizhukelAndPeghAsync(new DummyCsArgumentPrompter()).Result.Build();
+            Container = new ContainerBuilder().UseVishizhukelAndPeghAsync(new DummyCsArgumentPrompter()).Result.Build();
         }
 
         [TestMethod]
         public async Task CanGetSecretSecuredHttpGateSettings() {
-            var repository = vContainer.Resolve<ISecretRepository>();
+            var repository = Container.Resolve<ISecretRepository>();
             var securedHttpGateSettingsSecret = new SecretSecuredHttpGateSettings();
             var errorsAndInfos = new ErrorsAndInfos();
             var securedHttpGateSettings = await repository.GetAsync(securedHttpGateSettingsSecret, errorsAndInfos);
             Assert.IsFalse(errorsAndInfos.AnyErrors(), string.Join("\r\n", errorsAndInfos.Errors));
 
-            var folder = await vContainer.Resolve<IFolderResolver>().ResolveAsync(securedHttpGateSettings.LocalhostTempPath, errorsAndInfos);
+            var folder = await Container.Resolve<IFolderResolver>().ResolveAsync(securedHttpGateSettings.LocalhostTempPath, errorsAndInfos);
             Assert.IsFalse(errorsAndInfos.AnyErrors(), string.Join("\r\n", errorsAndInfos.Errors));
             var file = Directory.GetFiles(folder.FullName, "*.txt").FirstOrDefault();
             if (string.IsNullOrEmpty(file)) { return; }
 
             var contents = await File.ReadAllTextAsync(file);
             var shortFileName = file.Substring(file.LastIndexOf('\\') + 1);
-            var httpGate = vContainer.Resolve<IHttpGate>();
+            var httpGate = Container.Resolve<IHttpGate>();
             var httpResponseMessage = await httpGate.GetAsync(new Uri(securedHttpGateSettings.LocalhostTempPathUrl + shortFileName));
             var httpContents = await httpResponseMessage.Content.ReadAsStringAsync();
             Assert.AreEqual(contents, httpContents);

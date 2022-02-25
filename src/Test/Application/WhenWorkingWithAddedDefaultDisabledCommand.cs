@@ -8,10 +8,10 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
     [TestClass]
     public class WhenWorkingWithAddedDefaultDisabledCommand {
         [TestMethod]
-        public void ThenCommandIsDisabled() {
+        public async Task ThenCommandIsDisabled() {
             using var context = new ApplicationCommandControllerTestExecutionContext();
             context.Controller.AddCommand(new PrimeNumbersCommand(), false);
-            Assert.IsFalse(context.Controller.Enabled(typeof(PrimeNumbersCommand)));
+            Assert.IsFalse(await context.Controller.EnabledAsync(typeof(PrimeNumbersCommand)));
         }
 
         [TestMethod]
@@ -20,7 +20,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
             context.Controller.AddCommand(new PrimeNumbersCommand(), false);
             await context.Controller.EnableCommand(typeof(PrimeNumbersCommand));
             await context.Controller.DisableCommand(typeof(PrimeNumbersCommand));
-            Assert.IsFalse(context.Controller.Enabled(typeof(PrimeNumbersCommand)));
+            Assert.IsFalse(await context.Controller.EnabledAsync(typeof(PrimeNumbersCommand)));
         }
 
         [TestMethod]
@@ -30,18 +30,18 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
             await context.Controller.EnableCommand(typeof(PrimeNumbersCommand));
             await context.Controller.EnableCommand(typeof(PrimeNumbersCommand));
             await context.Controller.DisableCommand(typeof(PrimeNumbersCommand));
-            Assert.IsTrue(context.Controller.Enabled(typeof(PrimeNumbersCommand)));
+            Assert.IsTrue(await context.Controller.EnabledAsync(typeof(PrimeNumbersCommand)));
         }
 
         [TestMethod]
-        public void AddedDefaultDisabledCommandCanBeEnabledViaFeedback() {
+        public async Task AddedDefaultDisabledCommandCanBeEnabledViaFeedback() {
             using var context = new ApplicationCommandControllerTestExecutionContext();
             context.Controller.AddCommand(new PrimeNumbersCommand(), false);
-            Assert.IsFalse(context.Controller.Enabled(typeof(PrimeNumbersCommand)));
+            Assert.IsFalse(await context.Controller.EnabledAsync(typeof(PrimeNumbersCommand)));
             var feedback = new FeedbackToApplication() { Type = FeedbackType.EnableCommand, CommandType = typeof(PrimeNumbersCommand) };
             context.Context.Report(feedback);
             Thread.Sleep(ApplicationCommandControllerTestExecutionContext.MillisecondsToWaitForFeedbackToReturn);
-            Assert.IsTrue(context.Controller.Enabled(typeof(PrimeNumbersCommand)));
+            Assert.IsTrue(await context.Controller.EnabledAsync(typeof(PrimeNumbersCommand)));
         }
 
         [TestMethod]
@@ -49,7 +49,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
             using var context = new ApplicationCommandControllerTestExecutionContext();
             context.Controller.AddCommand(new PrimeNumbersCommand(), false);
             await context.Controller.EnableCommand(typeof(PrimeNumbersCommand));
-            Assert.IsTrue(context.Controller.Enabled(typeof(PrimeNumbersCommand)));
+            Assert.IsTrue(await context.Controller.EnabledAsync(typeof(PrimeNumbersCommand)));
         }
     }
 }

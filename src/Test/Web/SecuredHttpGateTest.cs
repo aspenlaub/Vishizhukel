@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
     [TestClass]
     public class SecuredHttpGateTest {
-        private readonly IContainer vContainer;
+        private readonly IContainer Container;
 
         protected ISecuredHttpGate Sut;
         protected IHttpGate HttpGate;
@@ -16,13 +16,13 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
         protected string ValidMarkup, MarkupWithoutCompatibilityTag;
 
         public SecuredHttpGateTest() {
-            vContainer = new ContainerBuilder().UseVishizhukelDvinAndPeghAsync(new DummyCsArgumentPrompter()).Result.Build();
+            Container = new ContainerBuilder().UseVishizhukelDvinAndPeghAsync(new DummyCsArgumentPrompter()).Result.Build();
         }
 
         [TestInitialize]
         public void Initialize() {
-            HttpGate = vContainer.Resolve<IHttpGate>();
-            Sut = vContainer.Resolve<ISecuredHttpGate>();
+            HttpGate = Container.Resolve<IHttpGate>();
+            Sut = Container.Resolve<ISecuredHttpGate>();
             NonsenseUri = new Uri(@"http://localhost/this/url/is/nonsense.php");
             ValidMarkup = "<html><head><meta http-equiv=\"X-UA-Compatible\" content=\"IE =edge,chrome=1\" ></head><body></body></html>";
             MarkupWithoutCompatibilityTag = "<html><head></head><body></body></html>";

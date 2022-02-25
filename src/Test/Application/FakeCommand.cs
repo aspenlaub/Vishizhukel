@@ -5,27 +5,27 @@ using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Application;
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
     public class FakeCommand : IApplicationCommand {
         public bool MakeLogEntries => true;
-        private readonly bool vCanExecute;
+        private readonly bool CanExecute;
         protected IApplicationCommandController Controller;
         public bool WasExecuted { get; private set; }
 
         public FakeCommand(bool canExecute, IApplicationCommandController controller) {
-            vCanExecute = canExecute;
+            CanExecute = canExecute;
             Controller = controller;
             WasExecuted = false;
         }
 
         public string Name => Properties.Resources.FakeCommandName;
 
-        public bool CanExecute() {
-            return vCanExecute;
+        public async Task<bool> CanExecuteAsync() {
+            return await Task.FromResult(CanExecute);
         }
 
-        public async Task Execute(IApplicationCommandExecutionContext context) {
-            if (!vCanExecute) {
+        public async Task ExecuteAsync(IApplicationCommandExecutionContext context) {
+            if (!CanExecute) {
                 throw new NotImplementedException("Do not know how to execute a command that cannot be executed");
             }
-            if (Controller.Enabled(GetType())) {
+            if (await Controller.EnabledAsync(GetType())) {
                 throw new NotImplementedException("Command should be disabled while executing");
             }
 
