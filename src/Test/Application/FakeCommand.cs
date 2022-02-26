@@ -30,7 +30,6 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
             }
 
             WasExecuted = true;
-            await Task.Delay(50);
         }
     }
 }

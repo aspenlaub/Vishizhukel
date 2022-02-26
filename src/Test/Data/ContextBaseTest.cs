@@ -7,16 +7,16 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Data {
     public class ContextBaseTest {
         [TestMethod]
         public void CanWorkWithContextBase() {
-            using var context = new TestContext(SynchronizationContext.Current);
-            context.Migrate();
-            var dataCount = context.TestDatas.Count();
+            using var testContext = new TestContext(SynchronizationContext.Current);
+            testContext.Migrate();
+            var dataCount = testContext.TestDatas.Count();
             if (dataCount >= 10) {
-                context.TestDatas.RemoveRange(context.TestDatas.Take(dataCount - 9));
+                testContext.TestDatas.RemoveRange(testContext.TestDatas.Take(dataCount - 9));
             }
 
             var testData = new TestData();
-            context.Add(testData);
-            context.SaveChanges();
+            testContext.Add(testData);
+            testContext.SaveChanges();
         }
     }
 }

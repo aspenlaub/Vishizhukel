@@ -12,7 +12,5 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Application {
         Task DisableCommandAsync(Type commandType);
 
         bool IsMainThread();
-
-        Task AwaitAllAsynchronousTasksAsync();
     }
 }

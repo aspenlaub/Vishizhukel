@@ -12,13 +12,13 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
         }
 
         public async Task ExecuteAsync(IApplicationCommandExecutionContext context) {
-            context.Report("Starting calculating prime numbers, disable command for the moment", false);
-            context.Report(new FeedbackToApplication() { Type = FeedbackType.DisableCommand, CommandType = GetType() });
+            await context.ReportAsync("Starting calculating prime numbers, disable command for the moment", false);
+            await context.ReportAsync(new FeedbackToApplication() { Type = FeedbackType.DisableCommand, CommandType = GetType() });
             var task = CalculatePrimeNumbers(true, context);
-            context.Report("Awaiting the prime numbers", false);
+            await context.ReportAsync("Awaiting the prime numbers", false);
             await task;
-            context.Report("Enable prime number command", false);
-            context.Report(new FeedbackToApplication() { Type = FeedbackType.EnableCommand, CommandType = GetType() });
+            await context.ReportAsync("Enable prime number command", false);
+            await context.ReportAsync(new FeedbackToApplication() { Type = FeedbackType.EnableCommand, CommandType = GetType() });
         }
 
         private static async Task CalculatePrimeNumbers(bool calledFromMainThread, IApplicationCommandExecutionContext context) {
@@ -29,7 +29,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
                 var isPrime = await Task.Run(() => IsPrime(nCopy)).ConfigureAwait(calledFromMainThread);
                 if (!isPrime) { continue; }
 
-                context.Report($"{n} is a prime number", true);
+                await context.ReportAsync($"{n} is a prime number", true);
             } while (n < 100000);
         }
 

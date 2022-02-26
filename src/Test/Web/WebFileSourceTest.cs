@@ -32,25 +32,25 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
 
         [TestMethod]
         public async Task CanUpdateLocalFile() {
-            using var context = new WebFileSourceTestExecutionContext();
-            var result = await CanUpdateLocalFileAcceptingOrIgnoringResultAsync(context, false);
+            using var executionContext = new WebFileSourceTestExecutionContext();
+            var result = await CanUpdateLocalFileAcceptingOrIgnoringResultAsync(executionContext, false);
             Assert.IsFalse(result.FileExistedUpfront);
             Assert.IsTrue(result.UpToDate);
         }
 
         [TestMethod]
         public async Task CanUpdateLocalFileIgnoringTheResult() {
-            using var context = new WebFileSourceTestExecutionContext();
-            var result = await CanUpdateLocalFileAcceptingOrIgnoringResultAsync(context, true);
+            using var executionContext = new WebFileSourceTestExecutionContext();
+            var result = await CanUpdateLocalFileAcceptingOrIgnoringResultAsync(executionContext, true);
             Assert.IsFalse(result.FileExistedUpfront);
             Assert.IsFalse(result.UpToDate);
         }
 
         [TestMethod]
         public async Task CannotUpdateLocalFileIfUrlIsInValid() {
-            using var context = new WebFileSourceTestExecutionContext();
-            Assert.IsFalse(File.Exists(context.LocalFileName));
-            var upToDate = await context.WebFileSource.TryAndUpdateLocalCopyOfWebFileReturnUpToDateAsync(WrongReadMeUrl, context.LocalFileName);
+            using var executionContext = new WebFileSourceTestExecutionContext();
+            Assert.IsFalse(File.Exists(executionContext.LocalFileName));
+            var upToDate = await executionContext.WebFileSource.TryAndUpdateLocalCopyOfWebFileReturnUpToDateAsync(WrongReadMeUrl, executionContext.LocalFileName);
             Assert.IsFalse(upToDate);
         }
     }

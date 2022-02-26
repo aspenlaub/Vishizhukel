@@ -6,49 +6,49 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
     public class WhenWorkingWithCommandThatCanBeEnabledOrDisabled {
         [TestMethod]
         public async Task CommandIsNotEnabledForNewController() {
-            using var context = new ApplicationCommandControllerTestExecutionContext();
-            Assert.IsFalse(await context.Controller.EnabledAsync(typeof(PrimeNumbersCommand)));
+            var executionContext = new ApplicationCommandControllerTestExecutionContext();
+            Assert.IsFalse(await executionContext.Controller.EnabledAsync(typeof(PrimeNumbersCommand)));
         }
 
         [TestMethod]
         public void OnCommandEnabledOrDisabledNotCalledInitially() {
-            using var context = new ApplicationCommandControllerTestExecutionContext();
-            Assert.IsFalse(context.CommandsEnabledOrDisabledWasReported);
+            var executionContext = new ApplicationCommandControllerTestExecutionContext();
+            Assert.IsFalse(executionContext.CommandsEnabledOrDisabledWasReported);
         }
 
         [TestMethod]
         public void OnCommandEnabledOrDisabledNotCalledWhenAddingACommand() {
-            using var context = new ApplicationCommandControllerTestExecutionContext();
-            context.Controller.AddCommand(new PrimeNumbersCommand(), true);
-            Assert.IsFalse(context.CommandsEnabledOrDisabledWasReported);
+            var executionContext = new ApplicationCommandControllerTestExecutionContext();
+            executionContext.Controller.AddCommand(new PrimeNumbersCommand(), true);
+            Assert.IsFalse(executionContext.CommandsEnabledOrDisabledWasReported);
         }
 
         [TestMethod]
         public async Task OnCommandEnabledOrDisabledIsCalledWhenDisablingACommand() {
-            using var context = new ApplicationCommandControllerTestExecutionContext();
-            context.Controller.AddCommand(new PrimeNumbersCommand(), true);
-            await context.Controller.DisableCommandAsync(typeof(PrimeNumbersCommand));
-            Assert.IsTrue(context.CommandsEnabledOrDisabledWasReported);
+            var executionContext = new ApplicationCommandControllerTestExecutionContext();
+            executionContext.Controller.AddCommand(new PrimeNumbersCommand(), true);
+            await executionContext.Controller.DisableCommandAsync(typeof(PrimeNumbersCommand));
+            Assert.IsTrue(executionContext.CommandsEnabledOrDisabledWasReported);
         }
 
         [TestMethod]
         public async Task OnCommandEnabledOrDisabledIsCalledWhenReEnablingACommand() {
-            using var context = new ApplicationCommandControllerTestExecutionContext();
-            context.Controller.AddCommand(new PrimeNumbersCommand(), true);
-            await context.Controller.DisableCommandAsync(typeof(PrimeNumbersCommand));
-            context.CommandsEnabledOrDisabledWasReported = false;
-            await context.Controller.EnableCommandAsync(typeof(PrimeNumbersCommand));
-            Assert.IsTrue(context.CommandsEnabledOrDisabledWasReported);
+            var executionContext = new ApplicationCommandControllerTestExecutionContext();
+            executionContext.Controller.AddCommand(new PrimeNumbersCommand(), true);
+            await executionContext.Controller.DisableCommandAsync(typeof(PrimeNumbersCommand));
+            executionContext.CommandsEnabledOrDisabledWasReported = false;
+            await executionContext.Controller.EnableCommandAsync(typeof(PrimeNumbersCommand));
+            Assert.IsTrue(executionContext.CommandsEnabledOrDisabledWasReported);
         }
 
         [TestMethod]
         public async Task OnCommandEnabledOrDisabledIsCalledWhenDisablingACommandTwice() {
-            using var context = new ApplicationCommandControllerTestExecutionContext();
-            context.Controller.AddCommand(new PrimeNumbersCommand(), true);
-            await context.Controller.DisableCommandAsync(typeof(PrimeNumbersCommand));
-            context.CommandsEnabledOrDisabledWasReported = false;
-            await context.Controller.DisableCommandAsync(typeof(PrimeNumbersCommand));
-            Assert.IsFalse(context.CommandsEnabledOrDisabledWasReported);
+            var executionContext = new ApplicationCommandControllerTestExecutionContext();
+            executionContext.Controller.AddCommand(new PrimeNumbersCommand(), true);
+            await executionContext.Controller.DisableCommandAsync(typeof(PrimeNumbersCommand));
+            executionContext.CommandsEnabledOrDisabledWasReported = false;
+            await executionContext.Controller.DisableCommandAsync(typeof(PrimeNumbersCommand));
+            Assert.IsFalse(executionContext.CommandsEnabledOrDisabledWasReported);
         }
     }
 }

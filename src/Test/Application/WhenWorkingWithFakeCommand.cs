@@ -6,31 +6,29 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
     public class WhenWorkingWithFakeCommand {
         [TestMethod]
         public async Task DefaultEnabledCommandIsDisabledWhileExecuting() {
-            using var context = new ApplicationCommandControllerTestExecutionContext();
-            var command = new FakeCommand(true, context.Controller);
+            var executionContext = new ApplicationCommandControllerTestExecutionContext();
+            var command = new FakeCommand(true, executionContext.Controller);
             Assert.IsFalse(command.WasExecuted);
-            context.Controller.AddCommand(command, true);
-            Assert.IsTrue(await context.Controller.EnabledAsync(typeof(FakeCommand)));
-            await context.Controller.ExecuteAsync(typeof(FakeCommand));
-            await context.Controller.AwaitAllAsynchronousTasksAsync();
+            executionContext.Controller.AddCommand(command, true);
+            Assert.IsTrue(await executionContext.Controller.EnabledAsync(typeof(FakeCommand)));
+            await executionContext.Controller.ExecuteAsync(typeof(FakeCommand));
             Assert.IsTrue(command.WasExecuted);
-            Assert.IsTrue(await context.Controller.EnabledAsync(typeof(FakeCommand)));
+            Assert.IsTrue(await executionContext.Controller.EnabledAsync(typeof(FakeCommand)));
         }
 
         [TestMethod]
         public async Task DefaultDisabledCommandIsDisabledWhileExecuting() {
-            using var context = new ApplicationCommandControllerTestExecutionContext();
-            var command = new FakeCommand(true, context.Controller);
+            var executionContext = new ApplicationCommandControllerTestExecutionContext();
+            var command = new FakeCommand(true, executionContext.Controller);
             Assert.IsFalse(command.WasExecuted);
-            context.Controller.AddCommand(command, false);
-            Assert.IsTrue(!await context.Controller.EnabledAsync(typeof(FakeCommand)));
-            await context.Controller.EnableCommandAsync(typeof(FakeCommand));
-            await context.Controller.ExecuteAsync(typeof(FakeCommand));
-            await context.Controller.AwaitAllAsynchronousTasksAsync();
+            executionContext.Controller.AddCommand(command, false);
+            Assert.IsTrue(!await executionContext.Controller.EnabledAsync(typeof(FakeCommand)));
+            await executionContext.Controller.EnableCommandAsync(typeof(FakeCommand));
+            await executionContext.Controller.ExecuteAsync(typeof(FakeCommand));
             Assert.IsTrue(command.WasExecuted);
-            Assert.IsTrue(await context.Controller.EnabledAsync(typeof(FakeCommand)));
-            await context.Controller.DisableCommandAsync(typeof(FakeCommand));
-            Assert.IsTrue(!await context.Controller.EnabledAsync(typeof(FakeCommand)));
+            Assert.IsTrue(await executionContext.Controller.EnabledAsync(typeof(FakeCommand)));
+            await executionContext.Controller.DisableCommandAsync(typeof(FakeCommand));
+            Assert.IsTrue(!await executionContext.Controller.EnabledAsync(typeof(FakeCommand)));
         }
     }
 }

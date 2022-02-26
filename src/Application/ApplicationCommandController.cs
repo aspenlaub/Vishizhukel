@@ -9,56 +9,28 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application {
     public class ApplicationCommandController : IApplicationCommandController, IApplicationCommandExecutionContext {
         protected List<IApplicationCommand> Commands;
         protected int MainThreadId;
-        protected IProgress<IFeedbackToApplication> FeedbackToApplicationRegistry;
-        protected Action<IFeedbackToApplication> ApplicationFeedbackHandler;
+        protected Func<IFeedbackToApplication, Task> HandleApplicationFeedbackAsync;
         protected Dictionary<Type, int> EnableRequests, DisableRequests;
         protected Dictionary<Type, bool> DefaultEnabled;
         protected DateTime DoNotReportMessagesOfNoImportanceUntil;
         protected bool IgnoringOfMessagesWasReported;
-        protected List<Task> StartedAsynchronousTasks;
         protected static readonly int ReportMessagesOfNoImportanceEveryHowManyMilliseconds = 100;
 
-        public ApplicationCommandController(Action<IFeedbackToApplication> applicationFeedbackHandler) {
+        public ApplicationCommandController(Func<IFeedbackToApplication, Task> handleApplicationFeedbackAsync) {
             MainThreadId = Thread.CurrentThread.ManagedThreadId;
             Commands = new List<IApplicationCommand>();
-            ApplicationFeedbackHandler = applicationFeedbackHandler;
+            HandleApplicationFeedbackAsync = handleApplicationFeedbackAsync;
             EnableRequests = new Dictionary<Type, int>();
             DisableRequests = new Dictionary<Type, int>();
             DefaultEnabled = new Dictionary<Type, bool>();
             DoNotReportMessagesOfNoImportanceUntil = DateTime.Now;
             IgnoringOfMessagesWasReported = false;
-            StartedAsynchronousTasks = new List<Task>();
-            var feedbackToApplicationRegistry = new Progress<IFeedbackToApplication>();
-            feedbackToApplicationRegistry.ProgressChanged += ControllerApplicationFeedbackHandler;
-            FeedbackToApplicationRegistry = feedbackToApplicationRegistry;
-        }
-
-        protected async Task RunTaskAsync(Task task) {
-            StartedAsynchronousTasks.Add(task);
-            await task;
         }
 
         protected async Task DisableCommandRunTaskAndEnableCommandAsync(IApplicationCommand command) {
             await DisableCommandAsync(command.GetType());
             await command.ExecuteAsync(this);
             await EnableCommandAsync(command.GetType());
-        }
-
-        protected async void ControllerApplicationFeedbackHandler(object sender, IFeedbackToApplication feedback) {
-            switch (feedback.Type) {
-                case FeedbackType.EnableCommand: {
-                    await RunTaskAsync(EnableCommandAsync(feedback.CommandType));
-                }
-                break;
-                case FeedbackType.DisableCommand: {
-                    await RunTaskAsync(DisableCommandAsync(feedback.CommandType));
-                }
-                break;
-                default: {
-                    ApplicationFeedbackHandler(feedback);
-                }
-                break;
-            }
         }
 
         public void AddCommand(IApplicationCommand command, bool defaultEnabled) {
@@ -80,53 +52,60 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application {
         public async Task ExecuteAsync(Type commandType) {
             var command = Commands.FirstOrDefault(x => x.GetType() == commandType);
             if (command == null) {
-                FeedbackToApplicationRegistry.Report(new FeedbackToApplication() { Type = FeedbackType.UnknownCommand, CommandType = commandType });
-                await RunTaskAsync(Task.Delay(50));
+                await HandleApplicationFeedbackAsync(new FeedbackToApplication { Type = FeedbackType.UnknownCommand, CommandType = commandType });
                 return;
             }
 
             if (!await EnabledAsync(commandType)) {
-                FeedbackToApplicationRegistry.Report(new FeedbackToApplication() { Type = FeedbackType.CommandIsDisabled, CommandType = commandType });
-                await RunTaskAsync(Task.Delay(50));
+                await HandleApplicationFeedbackAsync(new FeedbackToApplication { Type = FeedbackType.CommandIsDisabled, CommandType = commandType });
                 return;
             }
 
             if (command.MakeLogEntries) {
-                FeedbackToApplicationRegistry.Report(new FeedbackToApplication() { Type = FeedbackType.LogInformation, Message = string.Format(Properties.Resources.ExecutingCommand, command.Name) });
+                await HandleApplicationFeedbackAsync(new FeedbackToApplication { Type = FeedbackType.LogInformation, Message = string.Format(Properties.Resources.ExecutingCommand, command.Name) });
             }
-            await RunTaskAsync(DisableCommandRunTaskAndEnableCommandAsync(command));
+            await DisableCommandRunTaskAndEnableCommandAsync(command);
             if (command.MakeLogEntries) {
-                FeedbackToApplicationRegistry.Report(new FeedbackToApplication() { Type = FeedbackType.LogInformation, Message = string.Format(Properties.Resources.ExecutedCommand, command.Name) });
+                await HandleApplicationFeedbackAsync(new FeedbackToApplication { Type = FeedbackType.LogInformation, Message = string.Format(Properties.Resources.ExecutedCommand, command.Name) });
             }
-            FeedbackToApplicationRegistry.Report(new FeedbackToApplication() { Type = FeedbackType.CommandExecutionCompleted, CommandType = command.GetType() });
+            await HandleApplicationFeedbackAsync(new FeedbackToApplication { Type = FeedbackType.CommandExecutionCompleted, CommandType = command.GetType() });
         }
 
-        public void Report(IFeedbackToApplication feedback) {
-            if (feedback.Type == FeedbackType.MessageOfNoImportance) {
-                Report(feedback.Message, true);
-            } else {
-                FeedbackToApplicationRegistry.Report(feedback);
+        public async Task ReportAsync(IFeedbackToApplication feedback) {
+            switch (feedback.Type) {
+                case FeedbackType.EnableCommand: {
+                    await EnableCommandAsync(feedback.CommandType);
+                } break;
+                case FeedbackType.DisableCommand: {
+                    await DisableCommandAsync(feedback.CommandType);
+                } break;
+                case FeedbackType.MessageOfNoImportance: {
+                    await ReportAsync(feedback.Message, true);
+                } break;
+                default: {
+                    await HandleApplicationFeedbackAsync(feedback);
+                } break;
             }
         }
 
-        public void Report(string message, bool ofNoImportance) {
-            if (IgnoreMessagesOfNoImportance(message, ofNoImportance)) { return; }
+        public async Task ReportAsync(string message, bool ofNoImportance) {
+            if (await IgnoreMessagesOfNoImportanceAsync(message, ofNoImportance)) { return; }
 
-            FeedbackToApplicationRegistry.Report(new FeedbackToApplication(message, ofNoImportance));
+            await HandleApplicationFeedbackAsync(new FeedbackToApplication(message, ofNoImportance));
         }
 
-        public void ReportExecutionResult(Type commandType, bool success, string errorMessage) {
+        public async Task ReportExecutionResultAsync(Type commandType, bool success, string errorMessage) {
             var message = success ? "" : errorMessage;
-            FeedbackToApplicationRegistry.Report(new FeedbackToApplication() { Type = FeedbackType.CommandExecutionCompletedWithMessage, Message = message, CommandType = commandType });
+            await HandleApplicationFeedbackAsync(new FeedbackToApplication { Type = FeedbackType.CommandExecutionCompletedWithMessage, Message = message, CommandType = commandType });
         }
 
-        protected bool IgnoreMessagesOfNoImportance(string message, bool ofNoImportance) {
+        protected async Task<bool> IgnoreMessagesOfNoImportanceAsync(string message, bool ofNoImportance) {
             if (!ofNoImportance) { return false; }
 
             if (DoNotReportMessagesOfNoImportanceUntil > DateTime.Now) {
                 if (IgnoringOfMessagesWasReported) { return true; }
 
-                FeedbackToApplicationRegistry.Report(new FeedbackToApplication() { Type = FeedbackType.MessagesOfNoImportanceWereIgnored, Message = "..." });
+                await HandleApplicationFeedbackAsync(new FeedbackToApplication { Type = FeedbackType.MessagesOfNoImportanceWereIgnored, Message = "..." });
                 IgnoringOfMessagesWasReported = true;
                 return true;
             }
@@ -137,11 +116,11 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application {
         }
 
         public async Task EnableCommandAsync(Type commandType) {
-            await RunTaskAsync(EnableOrDisableCommandAsync(commandType, true));
+            await EnableOrDisableCommandAsync(commandType, true);
         }
 
         public async Task DisableCommandAsync(Type commandType) {
-            await RunTaskAsync(EnableOrDisableCommandAsync(commandType, false));
+            await EnableOrDisableCommandAsync(commandType, false);
         }
 
         private async Task EnableOrDisableCommandAsync(Type commandType, bool enable) {
@@ -159,8 +138,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application {
             }
             if (wasEnabled == await EnabledAsync(commandType)) { return; }
 
-            FeedbackToApplicationRegistry.Report(new FeedbackToApplication() { Type = FeedbackType.CommandsEnabledOrDisabled });
-            await RunTaskAsync(Task.Delay(50));
+            await HandleApplicationFeedbackAsync(new FeedbackToApplication { Type = FeedbackType.CommandsEnabledOrDisabled });
         }
 
         public async Task<bool> EnabledAsync(Type commandType) {
@@ -181,14 +159,6 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application {
 
             enabled = command != null && await command.CanExecuteAsync();
             return enabled;
-        }
-
-        public async Task AwaitAllAsynchronousTasksAsync() {
-            if (StartedAsynchronousTasks.Any()) {
-                FeedbackToApplicationRegistry.Report(new FeedbackToApplication() { Type = FeedbackType.LogInformation, Message = Properties.Resources.AwaitingAllAsynchronousTasks });
-            }
-            await Task.WhenAll(StartedAsynchronousTasks);
-            StartedAsynchronousTasks.Clear();
         }
     }
 }

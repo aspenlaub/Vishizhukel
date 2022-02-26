@@ -21,26 +21,26 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Core {
 
         [TestMethod]
         public void CanWriteAFile() {
-            using var context = new TextFileWriterTestExecutionContext();
-            context.TextFileWriter.WriteAllLines(context.TestFolder, context.TestFileName, context.Lines, Encoding.UTF8);
-            Assert.IsTrue(File.Exists(context.TestFolder.FullName + '\\' + context.TestFileName));
-            Assert.IsTrue(AreTheseFilesInTheTestFolder(context, new List<string> { context.TestFileName }));
-            Assert.IsFalse(AreTheseFilesInTheTestFolder(context, new List<string> { context.TestFileName, context.TestFileName }));
-            Assert.IsFalse(AreTheseFilesInTheTestFolder(context, new List<string> { "", context.TestFileName }));
-            Assert.IsTrue(context.TextFileWriter.FileExistsAndIsIdentical(context.TestFolder, context.TestFileName, context.Lines, Encoding.UTF8));
+            using var executionContext = new TextFileWriterTestExecutionContext();
+            executionContext.TextFileWriter.WriteAllLines(executionContext.TestFolder, executionContext.TestFileName, executionContext.Lines, Encoding.UTF8);
+            Assert.IsTrue(File.Exists(executionContext.TestFolder.FullName + '\\' + executionContext.TestFileName));
+            Assert.IsTrue(AreTheseFilesInTheTestFolder(executionContext, new List<string> { executionContext.TestFileName }));
+            Assert.IsFalse(AreTheseFilesInTheTestFolder(executionContext, new List<string> { executionContext.TestFileName, executionContext.TestFileName }));
+            Assert.IsFalse(AreTheseFilesInTheTestFolder(executionContext, new List<string> { "", executionContext.TestFileName }));
+            Assert.IsTrue(executionContext.TextFileWriter.FileExistsAndIsIdentical(executionContext.TestFolder, executionContext.TestFileName, executionContext.Lines, Encoding.UTF8));
         }
 
         [TestMethod]
         public void OverwriteFileWithNewContentsCreatesBackupFile() {
-            using var context = new TextFileWriterTestExecutionContext();
-            context.TextFileWriter.WriteAllLines(context.TestFolder, context.TestFileName, context.Lines, Encoding.UTF8);
-            Assert.IsTrue(AreTheseFilesInTheTestFolder(context, new List<string> { context.TestFileName }));
-            Assert.IsTrue(context.TextFileWriter.FileExistsAndIsIdentical(context.TestFolder, context.TestFileName, context.Lines, Encoding.UTF8));
-            Assert.IsFalse(context.TextFileWriter.FileExistsAndIsIdentical(context.TestFolder, context.TestFileName, context.ChangedLines, Encoding.UTF8));
-            context.TextFileWriter.WriteAllLines(context.TestFolder, context.TestFileName, context.ChangedLines, Encoding.UTF8);
-            Assert.IsTrue(AreTheseFilesInTheTestFolder(context, new List<string> { context.TestFileBackup1Name, context.TestFileName }));
-            Assert.IsTrue(context.TextFileWriter.FileExistsAndIsIdentical(context.TestFolder, context.TestFileName, context.ChangedLines, Encoding.UTF8));
-            Assert.IsTrue(context.TextFileWriter.FileExistsAndIsIdentical(context.TestFolder, context.TestFileBackup1Name, context.Lines, Encoding.UTF8));
+            using var executionContext = new TextFileWriterTestExecutionContext();
+            executionContext.TextFileWriter.WriteAllLines(executionContext.TestFolder, executionContext.TestFileName, executionContext.Lines, Encoding.UTF8);
+            Assert.IsTrue(AreTheseFilesInTheTestFolder(executionContext, new List<string> { executionContext.TestFileName }));
+            Assert.IsTrue(executionContext.TextFileWriter.FileExistsAndIsIdentical(executionContext.TestFolder, executionContext.TestFileName, executionContext.Lines, Encoding.UTF8));
+            Assert.IsFalse(executionContext.TextFileWriter.FileExistsAndIsIdentical(executionContext.TestFolder, executionContext.TestFileName, executionContext.ChangedLines, Encoding.UTF8));
+            executionContext.TextFileWriter.WriteAllLines(executionContext.TestFolder, executionContext.TestFileName, executionContext.ChangedLines, Encoding.UTF8);
+            Assert.IsTrue(AreTheseFilesInTheTestFolder(executionContext, new List<string> { executionContext.TestFileBackup1Name, executionContext.TestFileName }));
+            Assert.IsTrue(executionContext.TextFileWriter.FileExistsAndIsIdentical(executionContext.TestFolder, executionContext.TestFileName, executionContext.ChangedLines, Encoding.UTF8));
+            Assert.IsTrue(executionContext.TextFileWriter.FileExistsAndIsIdentical(executionContext.TestFolder, executionContext.TestFileBackup1Name, executionContext.Lines, Encoding.UTF8));
         }
     }
 
