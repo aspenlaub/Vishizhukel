@@ -8,11 +8,11 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Application {
         Task<bool> EnabledAsync(Type commandType);
         Task ExecuteAsync(Type commandType);
 
-        Task EnableCommand(Type commandType);
-        Task DisableCommand(Type commandType);
+        Task EnableCommandAsync(Type commandType);
+        Task DisableCommandAsync(Type commandType);
 
         bool IsMainThread();
 
-        Task AwaitAllAsynchronousTasks();
+        Task AwaitAllAsynchronousTasksAsync();
     }
 }

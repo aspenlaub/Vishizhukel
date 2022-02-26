@@ -18,8 +18,8 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
         public async Task WhenCommandCanBeReDisabled() {
             using var context = new ApplicationCommandControllerTestExecutionContext();
             context.Controller.AddCommand(new PrimeNumbersCommand(), false);
-            await context.Controller.EnableCommand(typeof(PrimeNumbersCommand));
-            await context.Controller.DisableCommand(typeof(PrimeNumbersCommand));
+            await context.Controller.EnableCommandAsync(typeof(PrimeNumbersCommand));
+            await context.Controller.DisableCommandAsync(typeof(PrimeNumbersCommand));
             Assert.IsFalse(await context.Controller.EnabledAsync(typeof(PrimeNumbersCommand)));
         }
 
@@ -27,9 +27,9 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
         public async Task ThenCommandCannotBeReDisabledIfEnabledTwice() {
             using var context = new ApplicationCommandControllerTestExecutionContext();
             context.Controller.AddCommand(new PrimeNumbersCommand(), false);
-            await context.Controller.EnableCommand(typeof(PrimeNumbersCommand));
-            await context.Controller.EnableCommand(typeof(PrimeNumbersCommand));
-            await context.Controller.DisableCommand(typeof(PrimeNumbersCommand));
+            await context.Controller.EnableCommandAsync(typeof(PrimeNumbersCommand));
+            await context.Controller.EnableCommandAsync(typeof(PrimeNumbersCommand));
+            await context.Controller.DisableCommandAsync(typeof(PrimeNumbersCommand));
             Assert.IsTrue(await context.Controller.EnabledAsync(typeof(PrimeNumbersCommand)));
         }
 
@@ -48,7 +48,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
         public async Task ThenCommandCanBeEnabled() {
             using var context = new ApplicationCommandControllerTestExecutionContext();
             context.Controller.AddCommand(new PrimeNumbersCommand(), false);
-            await context.Controller.EnableCommand(typeof(PrimeNumbersCommand));
+            await context.Controller.EnableCommandAsync(typeof(PrimeNumbersCommand));
             Assert.IsTrue(await context.Controller.EnabledAsync(typeof(PrimeNumbersCommand)));
         }
     }

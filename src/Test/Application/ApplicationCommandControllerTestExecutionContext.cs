@@ -37,7 +37,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
         }
 
         public void Dispose() {
-            Controller.AwaitAllAsynchronousTasks().Wait();
+            Controller.AwaitAllAsynchronousTasksAsync().Wait();
         }
     }
 }

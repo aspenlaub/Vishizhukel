@@ -27,7 +27,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
         public async Task OnCommandEnabledOrDisabledIsCalledWhenDisablingACommand() {
             using var context = new ApplicationCommandControllerTestExecutionContext();
             context.Controller.AddCommand(new PrimeNumbersCommand(), true);
-            await context.Controller.DisableCommand(typeof(PrimeNumbersCommand));
+            await context.Controller.DisableCommandAsync(typeof(PrimeNumbersCommand));
             Assert.IsTrue(context.CommandsEnabledOrDisabledWasReported);
         }
 
@@ -35,9 +35,9 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
         public async Task OnCommandEnabledOrDisabledIsCalledWhenReEnablingACommand() {
             using var context = new ApplicationCommandControllerTestExecutionContext();
             context.Controller.AddCommand(new PrimeNumbersCommand(), true);
-            await context.Controller.DisableCommand(typeof(PrimeNumbersCommand));
+            await context.Controller.DisableCommandAsync(typeof(PrimeNumbersCommand));
             context.CommandsEnabledOrDisabledWasReported = false;
-            await context.Controller.EnableCommand(typeof(PrimeNumbersCommand));
+            await context.Controller.EnableCommandAsync(typeof(PrimeNumbersCommand));
             Assert.IsTrue(context.CommandsEnabledOrDisabledWasReported);
         }
 
@@ -45,9 +45,9 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
         public async Task OnCommandEnabledOrDisabledIsCalledWhenDisablingACommandTwice() {
             using var context = new ApplicationCommandControllerTestExecutionContext();
             context.Controller.AddCommand(new PrimeNumbersCommand(), true);
-            await context.Controller.DisableCommand(typeof(PrimeNumbersCommand));
+            await context.Controller.DisableCommandAsync(typeof(PrimeNumbersCommand));
             context.CommandsEnabledOrDisabledWasReported = false;
-            await context.Controller.DisableCommand(typeof(PrimeNumbersCommand));
+            await context.Controller.DisableCommandAsync(typeof(PrimeNumbersCommand));
             Assert.IsFalse(context.CommandsEnabledOrDisabledWasReported);
         }
     }

@@ -12,7 +12,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
             context.Controller.AddCommand(new PrimeNumbersCommand(), true);
             Assert.IsFalse(context.FeedbacksToApplication.Any(x => x.Type == FeedbackType.CommandExecutionCompleted));
             await context.Controller.ExecuteAsync(typeof(PrimeNumbersCommand));
-            await context.Controller.AwaitAllAsynchronousTasks();
+            await context.Controller.AwaitAllAsynchronousTasksAsync();
             var feedbacksToApplication = context.GetFeedbacksToApplication();
             Assert.IsTrue(feedbacksToApplication.Any(x => x.Type == FeedbackType.CommandExecutionCompleted));
         }

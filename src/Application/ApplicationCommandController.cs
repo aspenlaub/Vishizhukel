@@ -33,25 +33,25 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application {
             FeedbackToApplicationRegistry = feedbackToApplicationRegistry;
         }
 
-        protected async Task RunTask(Task task) {
+        protected async Task RunTaskAsync(Task task) {
             StartedAsynchronousTasks.Add(task);
             await task;
         }
 
-        protected async Task DisableCommandRunTaskAndEnableCommand(IApplicationCommand command) {
-            await DisableCommand(command.GetType());
+        protected async Task DisableCommandRunTaskAndEnableCommandAsync(IApplicationCommand command) {
+            await DisableCommandAsync(command.GetType());
             await command.ExecuteAsync(this);
-            await EnableCommand(command.GetType());
+            await EnableCommandAsync(command.GetType());
         }
 
         protected async void ControllerApplicationFeedbackHandler(object sender, IFeedbackToApplication feedback) {
             switch (feedback.Type) {
                 case FeedbackType.EnableCommand: {
-                    await RunTask(EnableCommand(feedback.CommandType));
+                    await RunTaskAsync(EnableCommandAsync(feedback.CommandType));
                 }
                 break;
                 case FeedbackType.DisableCommand: {
-                    await RunTask(DisableCommand(feedback.CommandType));
+                    await RunTaskAsync(DisableCommandAsync(feedback.CommandType));
                 }
                 break;
                 default: {
@@ -81,20 +81,20 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application {
             var command = Commands.FirstOrDefault(x => x.GetType() == commandType);
             if (command == null) {
                 FeedbackToApplicationRegistry.Report(new FeedbackToApplication() { Type = FeedbackType.UnknownCommand, CommandType = commandType });
-                await RunTask(Task.Delay(50));
+                await RunTaskAsync(Task.Delay(50));
                 return;
             }
 
             if (!await EnabledAsync(commandType)) {
                 FeedbackToApplicationRegistry.Report(new FeedbackToApplication() { Type = FeedbackType.CommandIsDisabled, CommandType = commandType });
-                await RunTask(Task.Delay(50));
+                await RunTaskAsync(Task.Delay(50));
                 return;
             }
 
             if (command.MakeLogEntries) {
                 FeedbackToApplicationRegistry.Report(new FeedbackToApplication() { Type = FeedbackType.LogInformation, Message = string.Format(Properties.Resources.ExecutingCommand, command.Name) });
             }
-            await RunTask(DisableCommandRunTaskAndEnableCommand(command));
+            await RunTaskAsync(DisableCommandRunTaskAndEnableCommandAsync(command));
             if (command.MakeLogEntries) {
                 FeedbackToApplicationRegistry.Report(new FeedbackToApplication() { Type = FeedbackType.LogInformation, Message = string.Format(Properties.Resources.ExecutedCommand, command.Name) });
             }
@@ -136,15 +136,15 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application {
             return false;
         }
 
-        public async Task EnableCommand(Type commandType) {
-            await RunTask(EnableOrDisableCommand(commandType, true));
+        public async Task EnableCommandAsync(Type commandType) {
+            await RunTaskAsync(EnableOrDisableCommandAsync(commandType, true));
         }
 
-        public async Task DisableCommand(Type commandType) {
-            await RunTask(EnableOrDisableCommand(commandType, false));
+        public async Task DisableCommandAsync(Type commandType) {
+            await RunTaskAsync(EnableOrDisableCommandAsync(commandType, false));
         }
 
-        private async Task EnableOrDisableCommand(Type commandType, bool enable) {
+        private async Task EnableOrDisableCommandAsync(Type commandType, bool enable) {
             var wasEnabled = await EnabledAsync(commandType);
             lock (this) {
                 if (enable) {
@@ -160,7 +160,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application {
             if (wasEnabled == await EnabledAsync(commandType)) { return; }
 
             FeedbackToApplicationRegistry.Report(new FeedbackToApplication() { Type = FeedbackType.CommandsEnabledOrDisabled });
-            await RunTask(Task.Delay(50));
+            await RunTaskAsync(Task.Delay(50));
         }
 
         public async Task<bool> EnabledAsync(Type commandType) {
@@ -183,7 +183,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application {
             return enabled;
         }
 
-        public async Task AwaitAllAsynchronousTasks() {
+        public async Task AwaitAllAsynchronousTasksAsync() {
             if (StartedAsynchronousTasks.Any()) {
                 FeedbackToApplicationRegistry.Report(new FeedbackToApplication() { Type = FeedbackType.LogInformation, Message = Properties.Resources.AwaitingAllAsynchronousTasks });
             }
