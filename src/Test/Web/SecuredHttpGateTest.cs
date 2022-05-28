@@ -13,7 +13,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
         protected ISecuredHttpGate Sut;
         protected IHttpGate HttpGate;
         protected Uri NonsenseUri;
-        protected string ValidMarkup, MarkupWithoutCompatibilityTag;
+        protected string ValidMarkup, MarkupWithUnclosedElement;
 
         public SecuredHttpGateTest() {
             Container = new ContainerBuilder().UseVishizhukelDvinAndPeghAsync(new DummyCsArgumentPrompter()).Result.Build();
@@ -25,7 +25,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
             Sut = Container.Resolve<ISecuredHttpGate>();
             NonsenseUri = new Uri(@"http://localhost/this/url/is/nonsense.php");
             ValidMarkup = "<html><head><meta http-equiv=\"X-UA-Compatible\" content=\"IE =edge,chrome=1\" ></head><body></body></html>";
-            MarkupWithoutCompatibilityTag = "<html><head></head><body></body></html>";
+            MarkupWithUnclosedElement = "<html><head></head><body><p></body></html>";
         }
 
         [TestMethod]
@@ -37,12 +37,12 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
         }
 
         [TestMethod]
-        public async Task HtmlWithoutCompatibilityTagIsInvalid() {
+        public async Task HtmlWithUnclosedElementIsInvalid() {
             if (!await HttpGate.IsLocalHostAvailableAsync()) { return; }
 
-            var result = await Sut.IsHtmlMarkupValidAsync(MarkupWithoutCompatibilityTag);
+            var result = await Sut.IsHtmlMarkupValidAsync(MarkupWithUnclosedElement);
             Assert.IsFalse(result.Success);
-            Assert.AreEqual("Missing compatibility tag", result.ErrorMessage);
+            Assert.AreEqual("Unclosed element OpeningTag[elementId=p]", result.ErrorMessage);
         }
 
         [TestMethod]

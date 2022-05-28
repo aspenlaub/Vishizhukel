@@ -5,10 +5,8 @@ using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
-using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Core;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities.Web;
-using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Application;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Core;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Web;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Web;
@@ -36,7 +34,6 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel {
             var securedHttpGateSettings = await CreateSecuredHttpGateSettingsAsync(csArgumentPrompter);
             builder.RegisterInstance<ISecuredHttpGateSettings>(securedHttpGateSettings);
 
-            builder.RegisterType<ApplicationLog>().As<IApplicationLog>();
             builder.RegisterType<HttpGate>().As<IHttpGate>();
             builder.RegisterType<SecuredHttpGate>().As<ISecuredHttpGate>();
             builder.RegisterType<TextFileWriter>().As<ITextFileWriter>();
@@ -62,7 +59,6 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel {
             var securedHttpGateSettings = await CreateSecuredHttpGateSettingsAsync(csArgumentPrompter);
             services.AddSingleton<ISecuredHttpGateSettings>(securedHttpGateSettings);
 
-            services.AddTransient<IApplicationLog, ApplicationLog>();
             services.AddTransient<IHttpGate, HttpGate>();
             services.AddTransient<ISecuredHttpGate, SecuredHttpGate>();
             services.AddTransient<ITextFileWriter, TextFileWriter>();

@@ -1,4 +1,3 @@
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Application;

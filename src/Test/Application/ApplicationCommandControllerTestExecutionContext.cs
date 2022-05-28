@@ -12,14 +12,14 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
         internal bool CommandsEnabledOrDisabledWasReported { get; set; }
 
         internal ApplicationCommandControllerTestExecutionContext() {
-            var controller = new ApplicationCommandController(RecordApplicationFeedbackAync);
+            var controller = new ApplicationCommandController(RecordApplicationFeedbackAsync);
             Controller = controller;
             ExecutionContext = controller;
             FeedbacksToApplication = new List<IFeedbackToApplication>();
             FeedbacksToApplicationLock = new object();
         }
 
-        internal async Task RecordApplicationFeedbackAync(IFeedbackToApplication feedback) {
+        internal async Task RecordApplicationFeedbackAsync(IFeedbackToApplication feedback) {
             if (feedback.Type == FeedbackType.CommandsEnabledOrDisabled) {
                 CommandsEnabledOrDisabledWasReported = true;
             }
