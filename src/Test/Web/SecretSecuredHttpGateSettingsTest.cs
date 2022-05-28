@@ -16,7 +16,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
         private readonly IContainer Container;
 
         public SecretSecuredHttpGateSettingsTest() {
-            Container = new ContainerBuilder().UseVishizhukelAndPeghAsync(new DummyCsArgumentPrompter()).Result.Build();
+            Container = new ContainerBuilder().UseVishizhukelAndPeghAsync("Vishizhukel", new DummyCsArgumentPrompter()).Result.Build();
         }
 
         [TestMethod]

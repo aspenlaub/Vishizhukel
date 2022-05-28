@@ -11,9 +11,9 @@ using Autofac;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Web {
     public class ExceptionSaverAndSender {
-        public static async Task SaveUnhandledExceptionAsync(IFolder exceptionLogFolder, Exception exception, string source) {
+        public static async Task SaveUnhandledExceptionAsync(string applicationName, IFolder exceptionLogFolder, Exception exception, string source) {
             await ExceptionSaver.SaveUnhandledExceptionAsync(exceptionLogFolder, exception, source, async e => {
-                var container = new ContainerBuilder().UsePegh(new DummyCsArgumentPrompter()).Build();
+                var container = new ContainerBuilder().UsePegh(applicationName, new DummyCsArgumentPrompter()).Build();
                 var repository = container.Resolve<ISecretRepository>();
                 var securedHttpGateSettingsSecret = new SecretSecuredHttpGateSettings();
                 var errorsAndInfos = new ErrorsAndInfos();
