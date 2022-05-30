@@ -1,12 +1,23 @@
 using System.Threading.Tasks;
+using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
+using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
+using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
     [TestClass]
     public class WhenWorkingWithFakeCommand {
+        protected ISimpleLogger SimpleLogger;
+
+        [TestInitialize]
+        public void Initialize() {
+            var container = new ContainerBuilder().UsePegh("Vishizhukel", new DummyCsArgumentPrompter()).Build();
+            SimpleLogger = container.Resolve<ISimpleLogger>();
+        }
+
         [TestMethod]
         public async Task DefaultEnabledCommandIsDisabledWhileExecuting() {
-            var executionContext = new ApplicationCommandControllerTestExecutionContext();
+            var executionContext = new ApplicationCommandControllerTestExecutionContext(SimpleLogger);
             var command = new FakeCommand(true, executionContext.Controller);
             Assert.IsFalse(command.WasExecuted);
             executionContext.Controller.AddCommand(command, true);
@@ -18,7 +29,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
 
         [TestMethod]
         public async Task DefaultDisabledCommandIsDisabledWhileExecuting() {
-            var executionContext = new ApplicationCommandControllerTestExecutionContext();
+            var executionContext = new ApplicationCommandControllerTestExecutionContext(SimpleLogger);
             var command = new FakeCommand(true, executionContext.Controller);
             Assert.IsFalse(command.WasExecuted);
             executionContext.Controller.AddCommand(command, false);

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Application;
 
@@ -10,9 +11,11 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
         internal List<IFeedbackToApplication> FeedbacksToApplication { get; set; }
         internal object FeedbacksToApplicationLock;
         internal bool CommandsEnabledOrDisabledWasReported { get; set; }
+        internal ISimpleLogger SimpleLogger;
 
-        internal ApplicationCommandControllerTestExecutionContext() {
-            var controller = new ApplicationCommandController(RecordApplicationFeedbackAsync);
+        internal ApplicationCommandControllerTestExecutionContext(ISimpleLogger simpleLogger) {
+            SimpleLogger = simpleLogger;
+            var controller = new ApplicationCommandController(SimpleLogger, RecordApplicationFeedbackAsync);
             Controller = controller;
             ExecutionContext = controller;
             FeedbacksToApplication = new List<IFeedbackToApplication>();
