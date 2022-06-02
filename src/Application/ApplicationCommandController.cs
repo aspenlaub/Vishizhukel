@@ -54,7 +54,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application {
         }
 
         public async Task ExecuteAsync(Type commandType) {
-            using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ExecuteAsync), SimpleLogger.LogId))) {
+            using (SimpleLogger.BeginScope(SimpleLoggingScopeId.CreateWithRandomId(nameof(ExecuteAsync)))) {
                 var command = Commands.FirstOrDefault(x => x.GetType() == commandType);
                 if (command == null) {
                     await HandleApplicationFeedbackAsync(new FeedbackToApplication { Type = FeedbackType.UnknownCommand, CommandType = commandType });
@@ -130,7 +130,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application {
         }
 
         private async Task EnableOrDisableCommandAsync(Type commandType, bool enable) {
-            using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(EnableOrDisableCommandAsync), SimpleLogger.LogId))) {
+            using (SimpleLogger.BeginScope(SimpleLoggingScopeId.CreateWithRandomId(nameof(EnableOrDisableCommandAsync)))) {
                 var wasEnabled = await EnabledAsync(commandType);
                 lock (this) {
                     if (enable) {
@@ -150,7 +150,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Application {
         }
 
         public async Task<bool> EnabledAsync(Type commandType) {
-            using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(EnabledAsync), SimpleLogger.LogId))) {
+            using (SimpleLogger.BeginScope(SimpleLoggingScopeId.CreateWithRandomId(nameof(EnabledAsync)))) {
                 bool enabled;
                 IApplicationCommand command;
                 lock (this) {
