@@ -10,14 +10,14 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities.Web {
         [Key]
         public string Guid { get; set; }
 
-        public string SingleUseGuid { get => PrivateSingleUseGuid; set { PrivateSingleUseGuid = value; OnPropertyChanged(nameof(SingleUseGuid)); } }
-        private string PrivateSingleUseGuid;
+        public string SingleUseGuid { get => _SingleUseGuid; set { _SingleUseGuid = value; OnPropertyChanged(nameof(SingleUseGuid)); } }
+        private string _SingleUseGuid;
 
-        public bool SingleUseGuidUsed { get => PrivateSingleUseGuidUsed; set { PrivateSingleUseGuidUsed = value; OnPropertyChanged(nameof(SingleUseGuidUsed)); } }
-        private bool PrivateSingleUseGuidUsed;
+        public bool SingleUseGuidUsed { get => _SingleUseGuidUsed; set { _SingleUseGuidUsed = value; OnPropertyChanged(nameof(SingleUseGuidUsed)); } }
+        private bool _SingleUseGuidUsed;
 
-        public DateTime ExpireTime { get => PrivateExpireTime; set { PrivateExpireTime = value; OnPropertyChanged(nameof(ExpireTime)); } }
-        private DateTime PrivateExpireTime;
+        public DateTime ExpireTime { get => _ExpireTime; set { _ExpireTime = value; OnPropertyChanged(nameof(ExpireTime)); } }
+        private DateTime _ExpireTime;
 
         public Token() {
             Guid = System.Guid.NewGuid().ToString();

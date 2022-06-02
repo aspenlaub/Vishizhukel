@@ -11,15 +11,15 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Data {
     [TestClass]
     public class SecretDataSourceTest {
-        private readonly IContainer Container;
+        private readonly IContainer _Container;
 
         public SecretDataSourceTest() {
-            Container = new ContainerBuilder().UsePegh("Vishizhukel", new DummyCsArgumentPrompter()).Build();
+            _Container = new ContainerBuilder().UsePegh("Vishizhukel", new DummyCsArgumentPrompter()).Build();
         }
 
         [TestMethod]
         public async Task CanGetSecretConnectionStrings() {
-            var repository = Container.Resolve<ISecretRepository>();
+            var repository = _Container.Resolve<ISecretRepository>();
             var secretDataSources = new SecretDataSources();
             var errorsAndInfos = new ErrorsAndInfos();
             var dataSources = await repository.GetAsync(secretDataSources, errorsAndInfos);
