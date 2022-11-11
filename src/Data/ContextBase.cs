@@ -52,7 +52,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Data {
         }
 
         protected static string ConnectionString(string dataSource, string databaseName) {
-            return $@"Data Source={dataSource};Initial Catalog={databaseName};Integrated Security=True;MultipleActiveResultSets=True";
+            return $@"Data Source={dataSource};Initial Catalog={databaseName};Integrated Security=True;MultipleActiveResultSets=True;TrustServerCertificate=True";
         }
 
         public void Migrate() {
