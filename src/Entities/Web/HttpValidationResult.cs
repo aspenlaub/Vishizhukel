@@ -1,7 +1,7 @@
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities.Web {
     public class HtmlValidationResult {
-        public bool Success;
-        public string ErrorMessage;
+        public bool Success { get; set; }
+        public string ErrorMessage { get; set; }
 
         public HtmlValidationResult() {
             Success = false;
