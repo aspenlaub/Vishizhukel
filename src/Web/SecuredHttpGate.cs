@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities.Web;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Web;
-using Newtonsoft.Json;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Web {
     public class SecuredHttpGate : ISecuredHttpGate {
@@ -46,7 +46,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Web {
             if (response.StatusCode != HttpStatusCode.OK) { return new HtmlValidationResult { Success = false, ErrorMessage = "Service unavailable" }; }
 
             var json = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<HtmlValidationResult>(json);
+            return JsonSerializer.Deserialize<HtmlValidationResult>(json);
         }
 
         private async Task<IAliceAndBob> CreateAliceAndBobAsync() {
@@ -69,7 +69,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Web {
             if (response.StatusCode != HttpStatusCode.OK) { return false; }
 
             var json = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<HtmlValidationResult>(json);
+            var result = JsonSerializer.Deserialize<HtmlValidationResult>(json);
             return result?.Success == true;
         }
     }
