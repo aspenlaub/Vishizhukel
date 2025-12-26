@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Test/Vishizhukel.Test.csproj" />
+  <Project Path="Vishizhukel.csproj" />
+</Solution>
