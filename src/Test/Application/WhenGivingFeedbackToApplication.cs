@@ -16,14 +16,14 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
 
         [TestInitialize]
         public void Initialize() {
-            var container = new ContainerBuilder().UsePegh("Vishizhukel", new DummyCsArgumentPrompter()).Build();
+            IContainer container = new ContainerBuilder().UsePegh("Vishizhukel").Build();
             SimpleLogger = container.Resolve<ISimpleLogger>();
         }
 
         [TestMethod]
         public async Task CanReportMessageOfNoImportance() {
             var executionContext = new ApplicationCommandControllerTestExecutionContext(SimpleLogger);
-            var feedback = await CreateFeedbackAndReportAsync(executionContext, FeedbackType.MessageOfNoImportance, TestMessageOfNoImportance);
+            FeedbackToApplication feedback = await CreateFeedbackAndReportAsync(executionContext, FeedbackType.MessageOfNoImportance, TestMessageOfNoImportance);
             Assert.AreEqual(1, executionContext.FeedbacksToApplication.Count);
             Assert.IsTrue(IsFeedbackEqualToRecordedFeedback(executionContext, feedback, 0));
         }
@@ -43,7 +43,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
         [TestMethod]
         public async Task CanReportImportantMessage() {
             var executionContext = new ApplicationCommandControllerTestExecutionContext(SimpleLogger);
-            var feedback = await CreateFeedbackAndReportAsync(executionContext, FeedbackType.ImportantMessage, ImportantTestMessage);
+            FeedbackToApplication feedback = await CreateFeedbackAndReportAsync(executionContext, FeedbackType.ImportantMessage, ImportantTestMessage);
             Assert.AreEqual(1, executionContext.FeedbacksToApplication.Count);
             Assert.IsTrue(IsFeedbackEqualToRecordedFeedback(executionContext, feedback, 0));
         }
@@ -51,8 +51,8 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
         [TestMethod]
         public async Task CanReportTwoMessagesWithDifferentImportance() {
             var executionContext = new ApplicationCommandControllerTestExecutionContext(SimpleLogger);
-            var feedback = await CreateFeedbackAndReportAsync(executionContext, FeedbackType.ImportantMessage, ImportantTestMessage);
-            var anotherFeedback = await CreateFeedbackAndReportAsync(executionContext, FeedbackType.MessageOfNoImportance, TestMessageOfNoImportance);
+            FeedbackToApplication feedback = await CreateFeedbackAndReportAsync(executionContext, FeedbackType.ImportantMessage, ImportantTestMessage);
+            FeedbackToApplication anotherFeedback = await CreateFeedbackAndReportAsync(executionContext, FeedbackType.MessageOfNoImportance, TestMessageOfNoImportance);
             Assert.AreEqual(2, executionContext.FeedbacksToApplication.Count);
             Assert.IsTrue(IsFeedbackEqualToRecordedFeedback(executionContext, feedback, 0));
             Assert.IsTrue(IsFeedbackEqualToRecordedFeedback(executionContext, anotherFeedback, 1));

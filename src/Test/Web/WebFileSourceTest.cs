@@ -61,7 +61,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
         internal string LocalFileName => LocalFolder.FullName + '\\' + WebFileSourceTest.ReadMeShortFileName;
 
         public WebFileSourceTestExecutionContext() {
-            var container = new ContainerBuilder().UseVishizhukelAndPeghAsync("Vishizhukel", new DummyCsArgumentPrompter()).Result.Build();
+            var container = new ContainerBuilder().UseVishizhukelAndPeghAsync("Vishizhukel").Result.Build();
             WebFileSource = container.Resolve<IWebFileSource>();
             Cleanup();
             LocalFolder.CreateIfNecessary();

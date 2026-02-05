@@ -16,7 +16,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
         protected string ValidMarkup, MarkupWithUnclosedElement;
 
         public SecuredHttpGateTest() {
-            _Container = new ContainerBuilder().UseVishizhukelDvinAndPeghAsync("Vishizhukel", new DummyCsArgumentPrompter()).Result.Build();
+            _Container = new ContainerBuilder().UseVishizhukelDvinAndPeghAsync("Vishizhukel").Result.Build();
         }
 
         [TestInitialize]

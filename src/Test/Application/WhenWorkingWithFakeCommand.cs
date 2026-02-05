@@ -11,7 +11,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
 
         [TestInitialize]
         public void Initialize() {
-            var container = new ContainerBuilder().UsePegh("Vishizhukel", new DummyCsArgumentPrompter()).Build();
+            var container = new ContainerBuilder().UsePegh("Vishizhukel").Build();
             SimpleLogger = container.Resolve<ISimpleLogger>();
         }
 

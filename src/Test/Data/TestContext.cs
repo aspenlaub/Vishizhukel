@@ -22,7 +22,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Data {
         }
 
         private static DataSources GetDataSources() {
-            var container = new ContainerBuilder().UsePegh("Vishizhukel", new DummyCsArgumentPrompter()).Build();
+            var container = new ContainerBuilder().UsePegh("Vishizhukel").Build();
             var secretRepository = container.Resolve<ISecretRepository>();
             var secretDataSources = new SecretDataSources();
             var errorsAndInfos = new ErrorsAndInfos();

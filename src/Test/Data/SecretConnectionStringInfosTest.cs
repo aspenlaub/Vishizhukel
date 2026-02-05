@@ -13,7 +13,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Data {
         private readonly IContainer _Container;
 
         public SecretConnectionStringInfosTest() {
-            _Container = new ContainerBuilder().UsePegh("Vishizhukel", new DummyCsArgumentPrompter()).Build();
+            _Container = new ContainerBuilder().UsePegh("Vishizhukel").Build();
         }
 
         [TestMethod]
