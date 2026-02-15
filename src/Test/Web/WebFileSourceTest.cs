@@ -12,8 +12,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
     [TestClass]
     public class WebFileSourceTest {
-        private const string ReadMeUrl = "https://raw.githubusercontent.com/aspenlaub/Vishizhukel/master/build.cmd";
-        private const string WrongReadMeUrl = "https://raw.githubusercontent.com/aspenlaub/Vishizhukel/master/duilb.cmd";
+        private const string _readMeUrl = "https://raw.githubusercontent.com/aspenlaub/Vishizhukel/master/solution.json";
+        private const string _wrongReadMeUrl = "https://raw.githubusercontent.com/aspenlaub/Vishizhukel/master/solotion.json";
         internal const string ReadMeShortFileName = "README.md";
 
         private async Task<UpdateResult> CanUpdateLocalFileAcceptingOrIgnoringResultAsync(WebFileSourceTestExecutionContext context, bool ignoreResult) {
@@ -22,9 +22,9 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
                 UpToDate = false
             };
             if (ignoreResult) {
-                await context.WebFileSource.TryAndUpdateLocalCopyOfWebFileAsync(ReadMeUrl, context.LocalFileName);
+                await context.WebFileSource.TryAndUpdateLocalCopyOfWebFileAsync(_readMeUrl, context.LocalFileName);
             } else {
-                result.UpToDate = await context.WebFileSource.TryAndUpdateLocalCopyOfWebFileReturnUpToDateAsync(ReadMeUrl, context.LocalFileName);
+                result.UpToDate = await context.WebFileSource.TryAndUpdateLocalCopyOfWebFileReturnUpToDateAsync(_readMeUrl, context.LocalFileName);
             }
 
             return result;
@@ -33,7 +33,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
         [TestMethod]
         public async Task CanUpdateLocalFile() {
             using var executionContext = new WebFileSourceTestExecutionContext();
-            var result = await CanUpdateLocalFileAcceptingOrIgnoringResultAsync(executionContext, false);
+            UpdateResult result = await CanUpdateLocalFileAcceptingOrIgnoringResultAsync(executionContext, false);
             Assert.IsFalse(result.FileExistedUpfront);
             Assert.IsTrue(result.UpToDate);
         }
@@ -41,7 +41,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
         [TestMethod]
         public async Task CanUpdateLocalFileIgnoringTheResult() {
             using var executionContext = new WebFileSourceTestExecutionContext();
-            var result = await CanUpdateLocalFileAcceptingOrIgnoringResultAsync(executionContext, true);
+            UpdateResult result = await CanUpdateLocalFileAcceptingOrIgnoringResultAsync(executionContext, true);
             Assert.IsFalse(result.FileExistedUpfront);
             Assert.IsFalse(result.UpToDate);
         }
@@ -50,7 +50,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
         public async Task CannotUpdateLocalFileIfUrlIsInValid() {
             using var executionContext = new WebFileSourceTestExecutionContext();
             Assert.IsFalse(File.Exists(executionContext.LocalFileName));
-            var upToDate = await executionContext.WebFileSource.TryAndUpdateLocalCopyOfWebFileReturnUpToDateAsync(WrongReadMeUrl, executionContext.LocalFileName);
+            bool upToDate = await executionContext.WebFileSource.TryAndUpdateLocalCopyOfWebFileReturnUpToDateAsync(_wrongReadMeUrl, executionContext.LocalFileName);
             Assert.IsFalse(upToDate);
         }
     }
@@ -61,7 +61,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
         internal string LocalFileName => LocalFolder.FullName + '\\' + WebFileSourceTest.ReadMeShortFileName;
 
         public WebFileSourceTestExecutionContext() {
-            var container = new ContainerBuilder().UseVishizhukelAndPeghAsync("Vishizhukel").Result.Build();
+            IContainer container = new ContainerBuilder().UseVishizhukelAndPeghAsync("Vishizhukel").Result.Build();
             WebFileSource = container.Resolve<IWebFileSource>();
             Cleanup();
             LocalFolder.CreateIfNecessary();

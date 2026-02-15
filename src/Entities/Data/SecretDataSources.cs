@@ -1,11 +1,11 @@
 ﻿using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
 
-namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities.Data {
-    public class SecretDataSources : ISecret<DataSources> {
-        private DataSources _DefaultValue;
+namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities.Data;
 
-        public DataSources DefaultValue => _DefaultValue ??= new DataSources();
+public class SecretDataSources : ISecret<DataSources> {
+    private DataSources _DefaultValue;
 
-        public string Guid => "89DE3BA2-8479-432A-ACAA-62DCBF2F7A44";
-    }
+    public DataSources DefaultValue => _DefaultValue ??= new DataSources();
+
+    public string Guid => "89DE3BA2-8479-432A-ACAA-62DCBF2F7A44";
 }

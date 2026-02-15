@@ -1,7 +1,7 @@
-﻿namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Basic {
-    public abstract class GlobalSequenceNumberGenerator {
-        protected static long LastSequenceNumber;
+﻿namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Basic;
 
-        public static long NextValue => ++ LastSequenceNumber;
-    }
+public abstract class GlobalSequenceNumberGenerator {
+    protected static long LastSequenceNumber;
+
+    public static long NextValue => ++ LastSequenceNumber;
 }

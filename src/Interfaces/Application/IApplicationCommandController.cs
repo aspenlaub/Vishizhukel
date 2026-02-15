@@ -1,16 +1,16 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Application {
-    public interface IApplicationCommandController {
-        void AddCommand(IApplicationCommand command, bool defaultEnabled);
+namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Application;
 
-        Task<bool> EnabledAsync(Type commandType);
-        Task ExecuteAsync(Type commandType);
+public interface IApplicationCommandController {
+    void AddCommand(IApplicationCommand command, bool defaultEnabled);
 
-        Task EnableCommandAsync(Type commandType);
-        Task DisableCommandAsync(Type commandType);
+    Task<bool> EnabledAsync(Type commandType);
+    Task ExecuteAsync(Type commandType);
 
-        bool IsMainThread();
-    }
+    Task EnableCommandAsync(Type commandType);
+    Task DisableCommandAsync(Type commandType);
+
+    bool IsMainThread();
 }

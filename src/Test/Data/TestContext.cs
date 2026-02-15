@@ -10,7 +10,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Data {
     public class TestContext : ContextBase {
-        private const string Namespace = "Aspenlaub.Net.GitHub.CSharp.Vishizhukel";
+        private const string _namespace = "Aspenlaub.Net.GitHub.CSharp.Vishizhukel";
 
         public DbSet<TestData> TestDatas { get; set; }
 
@@ -18,7 +18,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Data {
         public TestContext() : this(SynchronizationContext.Current) {
         }
 
-        public TestContext(SynchronizationContext uiSynchronizationContext) : base(EnvironmentType.UnitTest, uiSynchronizationContext, Namespace, new ConnectionStringInfos(), GetDataSources()) {
+        public TestContext(SynchronizationContext uiSynchronizationContext) : base(EnvironmentType.UnitTest, uiSynchronizationContext, _namespace, new ConnectionStringInfos(), GetDataSources()) {
         }
 
         private static DataSources GetDataSources() {
