@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
-using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
+using Aspenlaub.Net.GitHub.CSharp.Skladasu.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Core;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities.Web;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Web;

@@ -6,9 +6,9 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
-using Aspenlaub.Net.GitHub.CSharp.Pegh.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
+using Aspenlaub.Net.GitHub.CSharp.Skladasu.Entities;
+using Aspenlaub.Net.GitHub.CSharp.Skladasu.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities.Web;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Web;
 

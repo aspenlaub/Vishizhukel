@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
-using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
+using Aspenlaub.Net.GitHub.CSharp.Skladasu.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Data;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities.Data;
 using Autofac;
@@ -22,11 +22,11 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Data {
         }
 
         private static DataSources GetDataSources() {
-            var container = new ContainerBuilder().UsePegh("Vishizhukel").Build();
-            var secretRepository = container.Resolve<ISecretRepository>();
+            IContainer container = new ContainerBuilder().UsePegh("Vishizhukel").Build();
+            ISecretRepository secretRepository = container.Resolve<ISecretRepository>();
             var secretDataSources = new SecretDataSources();
             var errorsAndInfos = new ErrorsAndInfos();
-            var dataSources = secretRepository.GetAsync(secretDataSources, errorsAndInfos).Result;
+            DataSources dataSources = secretRepository.GetAsync(secretDataSources, errorsAndInfos).Result;
             Assert.IsFalse(errorsAndInfos.AnyErrors(), string.Join("\r\n", errorsAndInfos.Errors));
             return dataSources;
         }

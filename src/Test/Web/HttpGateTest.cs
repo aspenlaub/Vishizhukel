@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
-using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Web;
 using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -12,11 +12,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
         protected IHttpGate Sut;
         protected Uri NonsenseUri;
 
-        private readonly IContainer _Container;
-
-        public HttpGateTest() {
-            _Container = new ContainerBuilder().UseVishizhukelDvinAndPeghAsync("Vishizhukel").Result.Build();
-        }
+        private readonly IContainer _Container = new ContainerBuilder().UseVishizhukelDvinAndPeghAsync("Vishizhukel").Result.Build();
 
         [TestInitialize]
         public void Initialize() {
@@ -26,7 +22,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
 
         [TestMethod]
         public async Task CannotRequestInvalidUrl() {
-            var response = await Sut.GetAsync(NonsenseUri);
+            HttpResponseMessage response = await Sut.GetAsync(NonsenseUri);
             Assert.IsTrue(response.StatusCode == HttpStatusCode.NotFound || response.StatusCode == HttpStatusCode.ServiceUnavailable);
         }
 
@@ -34,7 +30,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
         public async Task NonsenseServiceUnavailableIfLocalhostUnavailable() {
             if (await Sut.IsLocalHostAvailableAsync()) { return; }
 
-            var response = await Sut.GetAsync(NonsenseUri);
+            HttpResponseMessage response = await Sut.GetAsync(NonsenseUri);
             Assert.AreEqual(HttpStatusCode.ServiceUnavailable, response.StatusCode);
         }
 
@@ -42,7 +38,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
         public async Task NonsenseNotFoundIfLocalhostAvailable() {
             if (!await Sut.IsLocalHostAvailableAsync()) { return; }
 
-            var response = await Sut.GetAsync(NonsenseUri);
+            HttpResponseMessage response = await Sut.GetAsync(NonsenseUri);
             Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
         }
     }

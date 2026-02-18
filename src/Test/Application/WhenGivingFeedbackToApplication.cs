@@ -24,7 +24,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
         public async Task CanReportMessageOfNoImportance() {
             var executionContext = new ApplicationCommandControllerTestExecutionContext(SimpleLogger);
             FeedbackToApplication feedback = await CreateFeedbackAndReportAsync(executionContext, FeedbackType.MessageOfNoImportance, TestMessageOfNoImportance);
-            Assert.AreEqual(1, executionContext.FeedbacksToApplication.Count);
+            Assert.HasCount(1, executionContext.FeedbacksToApplication);
             Assert.IsTrue(IsFeedbackEqualToRecordedFeedback(executionContext, feedback, 0));
         }
 
@@ -44,7 +44,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
         public async Task CanReportImportantMessage() {
             var executionContext = new ApplicationCommandControllerTestExecutionContext(SimpleLogger);
             FeedbackToApplication feedback = await CreateFeedbackAndReportAsync(executionContext, FeedbackType.ImportantMessage, ImportantTestMessage);
-            Assert.AreEqual(1, executionContext.FeedbacksToApplication.Count);
+            Assert.HasCount(1, executionContext.FeedbacksToApplication);
             Assert.IsTrue(IsFeedbackEqualToRecordedFeedback(executionContext, feedback, 0));
         }
 
@@ -53,7 +53,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
             var executionContext = new ApplicationCommandControllerTestExecutionContext(SimpleLogger);
             FeedbackToApplication feedback = await CreateFeedbackAndReportAsync(executionContext, FeedbackType.ImportantMessage, ImportantTestMessage);
             FeedbackToApplication anotherFeedback = await CreateFeedbackAndReportAsync(executionContext, FeedbackType.MessageOfNoImportance, TestMessageOfNoImportance);
-            Assert.AreEqual(2, executionContext.FeedbacksToApplication.Count);
+            Assert.HasCount(2, executionContext.FeedbacksToApplication);
             Assert.IsTrue(IsFeedbackEqualToRecordedFeedback(executionContext, feedback, 0));
             Assert.IsTrue(IsFeedbackEqualToRecordedFeedback(executionContext, anotherFeedback, 1));
         }

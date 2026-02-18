@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
-using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
-using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
+using Aspenlaub.Net.GitHub.CSharp.Skladasu.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities.Web;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Web;
 using Autofac;
@@ -21,22 +21,22 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
 
         [TestMethod]
         public async Task CanGetSecretSecuredHttpGateSettings() {
-            var repository = _Container.Resolve<ISecretRepository>();
+            ISecretRepository repository = _Container.Resolve<ISecretRepository>();
             var securedHttpGateSettingsSecret = new SecretSecuredHttpGateSettings();
             var errorsAndInfos = new ErrorsAndInfos();
-            var securedHttpGateSettings = await repository.GetAsync(securedHttpGateSettingsSecret, errorsAndInfos);
+            SecuredHttpGateSettings securedHttpGateSettings = await repository.GetAsync(securedHttpGateSettingsSecret, errorsAndInfos);
             Assert.IsFalse(errorsAndInfos.AnyErrors(), string.Join("\r\n", errorsAndInfos.Errors));
 
-            var folder = await _Container.Resolve<IFolderResolver>().ResolveAsync(securedHttpGateSettings.LocalhostTempPath, errorsAndInfos);
+            IFolder folder = await _Container.Resolve<IFolderResolver>().ResolveAsync(securedHttpGateSettings.LocalhostTempPath, errorsAndInfos);
             Assert.IsFalse(errorsAndInfos.AnyErrors(), string.Join("\r\n", errorsAndInfos.Errors));
-            var file = Directory.GetFiles(folder.FullName, "*.txt").FirstOrDefault();
+            string file = Directory.GetFiles(folder.FullName, "*.txt").FirstOrDefault();
             if (string.IsNullOrEmpty(file)) { return; }
 
-            var contents = await File.ReadAllTextAsync(file);
-            var shortFileName = file.Substring(file.LastIndexOf('\\') + 1);
-            var httpGate = _Container.Resolve<IHttpGate>();
-            var httpResponseMessage = await httpGate.GetAsync(new Uri(securedHttpGateSettings.LocalhostTempPathUrl + shortFileName));
-            var httpContents = await httpResponseMessage.Content.ReadAsStringAsync();
+            string contents = await File.ReadAllTextAsync(file);
+            string shortFileName = file.Substring(file.LastIndexOf('\\') + 1);
+            IHttpGate httpGate = _Container.Resolve<IHttpGate>();
+            HttpResponseMessage httpResponseMessage = await httpGate.GetAsync(new Uri(securedHttpGateSettings.LocalhostTempPathUrl + shortFileName));
+            string httpContents = await httpResponseMessage.Content.ReadAsStringAsync();
             Assert.AreEqual(contents, httpContents);
         }
     }

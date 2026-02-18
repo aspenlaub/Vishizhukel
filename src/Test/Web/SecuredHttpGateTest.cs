@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
+using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Entities.Web;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Web;
 using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -32,7 +32,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
         public async Task ValidHtmlIsValid() {
             if (!await HttpGate.IsLocalHostAvailableAsync()) { return; }
 
-            var result = await Sut.IsHtmlMarkupValidAsync(ValidMarkup);
+            HtmlValidationResult result = await Sut.IsHtmlMarkupValidAsync(ValidMarkup);
             Assert.IsTrue(result.Success);
         }
 
@@ -40,7 +40,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
         public async Task HtmlWithUnclosedElementIsInvalid() {
             if (!await HttpGate.IsLocalHostAvailableAsync()) { return; }
 
-            var result = await Sut.IsHtmlMarkupValidAsync(MarkupWithUnclosedElement);
+            HtmlValidationResult result = await Sut.IsHtmlMarkupValidAsync(MarkupWithUnclosedElement);
             Assert.IsFalse(result.Success);
             Assert.AreEqual("Unclosed element OpeningTag[elementId=p]", result.ErrorMessage);
         }
@@ -49,7 +49,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
         public async Task CanRegisterDefect() {
             if (!await HttpGate.AreWeOnlineAsync()) { return; }
 
-            var okay = await Sut.RegisterDefectAsync("Vishizhukel's test defect", "Please close this defect if you see it", true);
+            bool okay = await Sut.RegisterDefectAsync("Vishizhukel's test defect", "Please close this defect if you see it", true);
             Assert.IsTrue(okay);
         }
     }

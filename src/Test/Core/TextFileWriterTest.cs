@@ -7,6 +7,8 @@ using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
+using Aspenlaub.Net.GitHub.CSharp.Seoa.Extensions;
+using Aspenlaub.Net.GitHub.CSharp.Skladasu.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Core;
 using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -53,11 +55,11 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Core {
         internal List<string> ChangedLines { get; }
 
         public TextFileWriterTestExecutionContext() {
-            var container = new ContainerBuilder().UseVishizhukelAndPeghAsync("Vishizhukel").Result.Build();
+            IContainer container = new ContainerBuilder().UseVishizhukelAndPeghAsync("Vishizhukel").Result.Build();
             TextFileWriter = container.Resolve<ITextFileWriter>();
             var errorsAndInfos = new ErrorsAndInfos();
             TestFolder = new Folder(Path.GetTempPath()).SubFolder("AspenlaubTemp").SubFolder(nameof(TextFileWriterTest));
-            Assert.IsFalse(errorsAndInfos.AnyErrors(), errorsAndInfos.ErrorsToString());
+            Assert.That.ThereWereNoErrors(errorsAndInfos);
             TestFileName = "begin_end.txt";
             TestFileBackup1Name = "begin_end.001";
             Lines = new List<string> { "begin", "end" };

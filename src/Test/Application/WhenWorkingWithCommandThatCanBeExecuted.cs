@@ -21,30 +21,30 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Application {
         public async Task AddedEnabledCommandCanBeExecuted() {
             var executionContext = new ApplicationCommandControllerTestExecutionContext(SimpleLogger);
             executionContext.Controller.AddCommand(new PrimeNumbersCommand(), true);
-            Assert.IsFalse(executionContext.FeedbacksToApplication.Any(x => x.Type == FeedbackType.CommandExecutionCompleted));
+            Assert.DoesNotContain(x => x.Type == FeedbackType.CommandExecutionCompleted, executionContext.FeedbacksToApplication);
             await executionContext.Controller.ExecuteAsync(typeof(PrimeNumbersCommand));
             var feedbacksToApplication = executionContext.GetFeedbacksToApplication();
-            Assert.IsTrue(feedbacksToApplication.Any(x => x.Type == FeedbackType.CommandExecutionCompleted));
+            Assert.Contains(x => x.Type == FeedbackType.CommandExecutionCompleted, feedbacksToApplication);
         }
 
         [TestMethod]
         public async Task AddedDisabledCommandCanBeExecuted() {
             var executionContext = new ApplicationCommandControllerTestExecutionContext(SimpleLogger);
             executionContext.Controller.AddCommand(new PrimeNumbersCommand(), false);
-            Assert.IsFalse(executionContext.FeedbacksToApplication.Any(x => x.Type == FeedbackType.CommandExecutionCompleted));
-            Assert.IsFalse(executionContext.FeedbacksToApplication.Any(x => x.Type == FeedbackType.CommandIsDisabled));
+            Assert.DoesNotContain(x => x.Type == FeedbackType.CommandExecutionCompleted, executionContext.FeedbacksToApplication);
+            Assert.DoesNotContain(x => x.Type == FeedbackType.CommandIsDisabled, executionContext.FeedbacksToApplication);
             await executionContext.Controller.ExecuteAsync(typeof(PrimeNumbersCommand));
-            Assert.IsTrue(executionContext.FeedbacksToApplication.Any(x => x.Type == FeedbackType.CommandIsDisabled));
+            Assert.Contains(x => x.Type == FeedbackType.CommandIsDisabled, executionContext.FeedbacksToApplication);
         }
 
         [TestMethod]
         public async Task SomethingThatIsNotACommandCanBeExecutedButNotCompleted() {
             var executionContext = new ApplicationCommandControllerTestExecutionContext(SimpleLogger);
-            Assert.IsFalse(executionContext.FeedbacksToApplication.Any(x => x.Type == FeedbackType.CommandExecutionCompleted));
-            Assert.IsFalse(executionContext.FeedbacksToApplication.Any(x => x.Type == FeedbackType.UnknownCommand));
+            Assert.DoesNotContain(x => x.Type == FeedbackType.CommandExecutionCompleted, executionContext.FeedbacksToApplication);
+            Assert.DoesNotContain(x => x.Type == FeedbackType.UnknownCommand, executionContext.FeedbacksToApplication);
             await executionContext.Controller.ExecuteAsync(GetType());
-            Assert.IsFalse(executionContext.FeedbacksToApplication.Any(x => x.Type == FeedbackType.CommandExecutionCompleted));
-            Assert.IsTrue(executionContext.FeedbacksToApplication.Any(x => x.Type == FeedbackType.UnknownCommand));
+            Assert.DoesNotContain(x => x.Type == FeedbackType.CommandExecutionCompleted, executionContext.FeedbacksToApplication);
+            Assert.Contains(x => x.Type == FeedbackType.UnknownCommand, executionContext.FeedbacksToApplication);
         }
     }
 }
