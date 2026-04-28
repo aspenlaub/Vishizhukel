@@ -23,8 +23,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.6" />
-    <PackageReference Include="Seoa" Version="2.0.2456.1108" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.7" />
+    <PackageReference Include="Seoa" Version="2.0.2470.1061" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vishizhukel.csproj" />
