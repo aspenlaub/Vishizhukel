@@ -24,7 +24,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.7" />
-    <PackageReference Include="Seoa" Version="2.0.2470.1061" />
+    <PackageReference Include="Seoa" Version="2.0.2472.648" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vishizhukel.csproj" />
