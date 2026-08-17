@@ -37,7 +37,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Dvin" Version="2.0.2566.1053" />
+    <PackageReference Include="Dvin" Version="2.0.2581.1078" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.10.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>
