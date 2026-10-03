@@ -5,6 +5,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Interfaces.Web;
 
 public interface ISecuredHttpGateSettings {
     string ApiUrl { get; set; }
+    string WebApiUrl { get; set; }
     string LocalhostTempPath { get; set; }
     string LocalhostTempPathUrl { get; set; }
     SecuredHttpGateSettings Clone();

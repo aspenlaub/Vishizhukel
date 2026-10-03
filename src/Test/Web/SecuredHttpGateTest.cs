@@ -52,5 +52,13 @@ namespace Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test.Web {
             bool okay = await Sut.RegisterDefectAsync("Vishizhukel's test defect", "Please close this defect if you see it", true);
             Assert.IsTrue(okay);
         }
+
+        [TestMethod]
+        public async Task CanSendShortMessage() {
+            if (!await HttpGate.AreWeOnlineAsync()) { return; }
+
+            bool okay = await Sut.SendShortMessageAsync("Vishizhukel could send a message");
+            Assert.IsTrue(okay);
+        }
     }
 }

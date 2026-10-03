@@ -9,6 +9,9 @@ public class SecuredHttpGateSettings : ISecretResult<SecuredHttpGateSettings>, I
     [XmlElement("apiurl")]
     public string ApiUrl { get; set; }
 
+    [XmlElement("webapiurl")]
+    public string WebApiUrl { get; set; }
+
     [XmlElement("localhosttemppath")]
     public string LocalhostTempPath { get; set; }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -55,7 +56,23 @@ public class SecuredHttpGate(IHttpGate httpGate, ISecuredHttpGateSettings secure
     public async Task<bool> RegisterDefectAsync(string headline, string description, bool old) {
         IAliceAndBob aliceAndBob = await CreateAliceAndBobAsync();
         HttpResponseMessage response = await httpGate.PostAsync(securedHttpGateSettings.ApiUrl, new Dictionary<string, string> {
-            { "headline", headline }, { "description", description }, { "alice", aliceAndBob.Alice }, { "bob", aliceAndBob.Bob }, { "command", old ? "RegisterOldDefect" : "RegisterDefect" }, { "source", "main" }
+            { "headline", headline }, { "description", description },
+            { "alice", aliceAndBob.Alice }, { "bob", aliceAndBob.Bob },
+            { "command", old ? "RegisterOldDefect" : "RegisterDefect" }, { "source", "main" }
+        });
+        if (response.StatusCode != HttpStatusCode.OK) { return false; }
+
+        string json = await response.Content.ReadAsStringAsync();
+        HtmlValidationResult result = JsonSerializer.Deserialize<HtmlValidationResult>(json);
+        return result?.Success == true;
+    }
+
+    public async Task<bool> SendShortMessageAsync(string message) {
+        IAliceAndBob aliceAndBob = await CreateAliceAndBobAsync();
+        HttpResponseMessage response = await httpGate.PostAsync(securedHttpGateSettings.WebApiUrl, new Dictionary<string, string> {
+            { "message", message},
+            { "alice", aliceAndBob.Alice }, { "bob", aliceAndBob.Bob },
+            { "command", "SendShortMessage" }, { "source", "main" }
         });
         if (response.StatusCode != HttpStatusCode.OK) { return false; }
 
