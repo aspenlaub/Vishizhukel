@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net11.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <AssemblyName>Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test</AssemblyName>
     <RootNamespace>Aspenlaub.Net.GitHub.CSharp.Vishizhukel.Test</RootNamespace>
@@ -25,7 +25,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="11.0.0" />
-    <PackageReference Include="Seoa" Version="2.0.2666.1089" />
+    <PackageReference Include="Seoa" Version="2.0.2666.1373" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vishizhukel.csproj" />
